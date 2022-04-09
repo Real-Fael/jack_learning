@@ -1,0 +1,37 @@
+/* div{
+    height: 100%;
+    width:100%;
+} */
+.full{
+    height: 100%;
+    width:100%;
+}
+.column{
+    background-color: #0062ac;
+    
+    display: inline-block;
+}
+.row{
+    background-color: #d8dee2;
+    
+  
+}
+.workSpace{
+    width: calc(100% * 2 / 3);
+}
+
+.describe{
+    width: calc(100% * 1/ 3);
+}
+
+.exercise, .container{
+   display: flex;
+    
+}
+.execution{
+    height: calc(100% *  1/3);
+}
+
+.editor{
+    height: calc(100% * 2/3);
+}
