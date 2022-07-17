@@ -8,6 +8,13 @@ import ReadBySep from '../../services/inputTextService';
 //import test from "../../data/blocklyPalette.json"
 
 import "../customBlocks/customBlocks"
+import Grid from '@material-ui/core/Grid/Grid';
+import Box from '@material-ui/core/Box/Box';
+import styled from '@material-ui/core/styles/styled';
+import { Paper } from '@material-ui/core';
+import test from "../../data/blocklyPalette.json"
+import getWindowDimensions from '../../services/windowDimensions';
+
 
 
 class BlocklyExecControll extends React.Component{
@@ -17,18 +24,29 @@ class BlocklyExecControll extends React.Component{
     super(props);
     //console.log(props)
     
-    this.myToolBox = props.toolBox;
-    
-    
+    // this.myToolBox = props.toolBox;
+    this.myToolBox = test
+    const { height, width } = getWindowDimensions();
+
     this.state ={
-      xml:''
+      xml:'',
+      windowSize: {height,width}
     }
     this.dataInput = React.createRef()
     this.dataOutput = React.createRef()
     //this.BlocklyEditor = React.createRef()
     
-
+    console.log(this.state)
   }
+
+  
+
+  // return (
+  //   <div>
+  //     width: {width} ~ height: {height}
+  //   </div>
+  // );
+
   updateXml= (xmlup)=>{
     console.log(xmlup)
     this.setState({
@@ -69,31 +87,53 @@ class BlocklyExecControll extends React.Component{
   }
   
   render() {
+    const Item = styled(Paper)(({ theme }) => ({
+      backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+      ...theme.typography.body2,
+      padding: theme.spacing(1),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+    }));
     return (
-      <>
-       <div className="column workSpace">
-                        
-                        <div className="row editor">
-                            <MyBlocklyEditor toolBox={this.props.toolBox} updateXml={this.updateXml} />
 
-                        </div>
-                        <div className="row execution">
-                            <div> 
-                                <button onClick={this.execCode} >Executar</button>
-                                <button onClick={this.testeInput}>Parar</button>
-                                <button >Enviar</button>
-                                <br></br>
+      
+      <div class="app-container">
+      
+          <MyBlocklyEditor toolBox={this.myToolBox} updateXml={this.updateXml} />
+        
+          <div class="main output-panel">
+            <button onClick={this.execCode} >Executar</button>
+            <button onClick={this.testeInput}>Parar</button>
+            <button >Enviar</button>
+            <br></br>
+        
+            <textarea ref={this.dataInput} className='textarea input'></textarea>
+            <textarea ref={this.dataOutput} className='textarea output' disabled ></textarea>
+          </div>
+      {/* <div className="column workSpace">
+              
+              <div className="row editor">
+                  <MyBlocklyEditor toolBox={this.props.toolBox} updateXml={this.updateXml} />
 
-                            </div>
-                            
-                                <textarea ref={this.dataInput} className='textarea input'></textarea>
-                                <textarea ref={this.dataOutput} className='textarea output' disabled></textarea>
+              </div>
+              <div className="row execution">
+                  <div> 
+                      <button onClick={this.execCode} >Executar</button>
+                      <button onClick={this.testeInput}>Parar</button>
+                      <button >Enviar</button>
+                      <br></br>
 
-                            
-                        
-                        </div>
-                    </div>
-      </>
+                  </div>
+                  
+                      <textarea ref={this.dataInput} className='textarea input'></textarea>
+                      <textarea ref={this.dataOutput} className='textarea output' disabled></textarea>
+
+                  
+              
+              </div>
+          </div> */}
+      </div>
+      
     )
   }
 }

@@ -1,5 +1,6 @@
-import {React} from "react";
-import { BrowserRouter, Route,Routes, Link } from 'react-router-dom';
+import * as React from 'react';
+import { BrowserRouter, Route,Routes} from 'react-router-dom';
+import Navbar from "./components/navbar";
 import Exercise from "./views/pages/exercise";
 import Home from "./views/pages/home";
 
@@ -9,25 +10,46 @@ import Home from "./views/pages/home";
 
 
 import Login from "./views/pages/login"
-import NewExercise from "./views/pages/newExercise";
+import Logout from './views/pages/logout';
+import MyBlocklyEditor2 from "./views/pages/newExercise";
 import Register from "./views/pages/register";
 
+class MyRoutes extends React.Component{
 
+    constructor(props){
+        super(props);
+        this.state ={
+            
+            alertMessage:<></>
+            // redirect:''
+        }
+    }
 
-const MyRoutes = () => {
+    changeAlert = (alertComponent) => {
+        this.setState({alertMessage:alertComponent})
+    }
+    closeAlert= (event) =>{
+        this.setState({alertMessage:<></>})
+    }
+    alertControll = {"changeAlert":this.changeAlert,"closeAlert":this.closeAlert}
+ render () {
     return(
-    <BrowserRouter> 
-    <Routes>
-        <Route exact path='/' element={<Home/>} />
-        <Route  path='/register' element={<Register/>} />
-        <Route  path='/login' element={<Login/>} />
-        <Route  path='/Exercise' element={<Exercise/>} />
-        <Route  path='/NewExercise' element={<NewExercise/>} />
-    </Routes>
-        
-      
-    </BrowserRouter>
+    <>
+        <BrowserRouter> 
+        <Navbar></Navbar>
+        {this.state.alertMessage}
+            <Routes>
+                <Route exact path='/' element={<Home/>} />
+                <Route  path='/register' element={<Register alertControll={this.alertControll}/>} />
+                <Route  path='/login' element={<Login alertControll={this.alertControll}/>}  />
+                <Route  path='/Exercise' element={<Exercise/>} />
+                <Route  path='/NewExercise' element={<MyBlocklyEditor2/>} />
+                <Route  path='/logout' element={<Logout/>} />
+            </Routes>
+        </BrowserRouter>
+    </>
     )
  }
+}
  
  export default MyRoutes;

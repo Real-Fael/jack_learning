@@ -34,20 +34,25 @@ class MyBlocklyEditor extends React.Component{
   render() {
     return (
       <>
-        <BlocklyWorkspace
-          className="blockEditor" // you can use whatever classes are appropriate for your app's CSS
-          toolboxConfiguration={this.myToolBox} // this must be a JSON toolbox definition
-          initialXml={this.xml}
-          //teste = True
-          //if(teste) {
-            onXmlChange={this.updateXml}
+      
+        <div id="blocklyDiv" class="main blockly-panel">
+          <BlocklyWorkspace
+            className="blockEditor" // you can use whatever classes are appropriate for your app's CSS
+            toolboxConfiguration={this.myToolBox} // this must be a JSON toolbox definition
+            initialXml={this.xml}
+            
+            //teste = True
+            //if(teste) {
+              onXmlChange={this.updateXml}
 
-          // }
-          //else{
-          // advertindo
-          //}
-          //onWorkspaceChange={this.toLanguage}
-        />
+            // }
+            //else{
+            // advertindo
+            //}
+            //onWorkspaceChange={this.toLanguage}
+          />
+        </div>
+        
       </>
     )
   }

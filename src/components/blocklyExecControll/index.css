@@ -1,12 +1,15 @@
 .input{
     Height: calc(100% - 30px);
-    width: 48% ;
+    width: 50% ;
+    left: 8px;
 }
 
 .output{
     Height: calc(100% - 30px);
-    width: 48% ;
+    width: 50% ;
     background-color: darkgrey;
+    right: 8px;
+    margin-top: 8px;
 }
 
 .textarea {
