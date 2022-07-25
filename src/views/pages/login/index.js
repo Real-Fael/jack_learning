@@ -83,7 +83,7 @@ class Login extends React.Component{
             <Typography component="h1" variant="h5">
                 Entrar
             </Typography>
-            <Box ref={this.refForm} component="form" onSubmit={this.handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box ref={this.refForm} component="form" onSubmit={this.handleSubmit}  sx={{ mt: 1 }}>
                 <TextField
                 margin="normal"
                 required

@@ -35,7 +35,7 @@ class MyBlocklyEditor extends React.Component{
     return (
       <>
       
-        <div id="blocklyDiv" class="main blockly-panel">
+        <div id="blocklyDiv" className="main blockly-panel">
           <BlocklyWorkspace
             className="blockEditor" // you can use whatever classes are appropriate for your app's CSS
             toolboxConfiguration={this.myToolBox} // this must be a JSON toolbox definition

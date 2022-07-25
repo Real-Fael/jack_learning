@@ -101,7 +101,7 @@ class Register extends React.Component{
                   <Typography component="h1" variant="h5">
                     Cadastro
                   </Typography>
-                  <Box component="form" ref={this.refForm} noValidate onSubmit={this.handleSubmit} sx={{ mt: 3 }}>
+                  <Box component="form" ref={this.refForm}  onSubmit={this.handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
                       <Grid item xs={12} sm={6}>
                         <TextField

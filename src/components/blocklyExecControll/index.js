@@ -25,21 +25,38 @@ class BlocklyExecControll extends React.Component{
     //console.log(props)
     
     // this.myToolBox = props.toolBox;
-    this.myToolBox = test
-    const { height, width } = getWindowDimensions();
-
+    this.myToolBox = test;
+    // const { height, width } = getWindowDimensions();
+    
     this.state ={
       xml:'',
-      windowSize: {height,width}
+      // windowSize: {height,width}
     }
     this.dataInput = React.createRef()
     this.dataOutput = React.createRef()
     //this.BlocklyEditor = React.createRef()
-    
-    console.log(this.state)
+    const func= {
+      getXML:this.getXML,
+      setInput:this.setInput,
+      getOutput:this.getOutput,
+      executeXML: this.execCode
+    }
+    if (props.updateActions)
+      props.updateActions(func)
+    console.log(props.updateActions)
   }
 
-  
+  getOutput = () =>{
+    return this.dataOutput.current.value
+  }
+  setInput = (input) =>{
+    this.dataInput.current.value = input
+  }
+
+  getXML = () =>{
+    console.log(this.state.xml)
+    return this.state.xml
+  }
 
   // return (
   //   <div>
@@ -97,11 +114,11 @@ class BlocklyExecControll extends React.Component{
     return (
 
       
-      <div class="app-container">
+      <div className="app-container">
       
           <MyBlocklyEditor toolBox={this.myToolBox} updateXml={this.updateXml} />
         
-          <div class="main output-panel">
+          <div className="main output-panel">
             <button onClick={this.execCode} >Executar</button>
             <button onClick={this.testeInput}>Parar</button>
             <button >Enviar</button>
@@ -110,28 +127,7 @@ class BlocklyExecControll extends React.Component{
             <textarea ref={this.dataInput} className='textarea input'></textarea>
             <textarea ref={this.dataOutput} className='textarea output' disabled ></textarea>
           </div>
-      {/* <div className="column workSpace">
-              
-              <div className="row editor">
-                  <MyBlocklyEditor toolBox={this.props.toolBox} updateXml={this.updateXml} />
-
-              </div>
-              <div className="row execution">
-                  <div> 
-                      <button onClick={this.execCode} >Executar</button>
-                      <button onClick={this.testeInput}>Parar</button>
-                      <button >Enviar</button>
-                      <br></br>
-
-                  </div>
-                  
-                      <textarea ref={this.dataInput} className='textarea input'></textarea>
-                      <textarea ref={this.dataOutput} className='textarea output' disabled></textarea>
-
-                  
-              
-              </div>
-          </div> */}
+      
       </div>
       
     )

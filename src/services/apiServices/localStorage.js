@@ -1,4 +1,46 @@
 class LocalStorage{
+
+    
+
+    static getExerciseData(exerciseId){
+        let exists= null;
+        let exercise = this.getExerciseList();
+        for(let i=0;i<exercise.length;i++){
+            console.log(exercise[i].id , exerciseId )
+            if(exercise[i].id===parseInt(exerciseId)) {
+                exists={...exercise[i]};
+                break;
+            }
+        }
+        return exists;
+
+
+    }
+
+
+    static getExerciseList(){
+        let exercises = [];
+        if (window.localStorage.hasOwnProperty("exercises"))
+            exercises = JSON.parse(window.localStorage.getItem("exercises"));
+
+        return exercises;
+    }
+
+
+    static storeExerciseData(exerciseData){
+        
+        //caso retorne um objeto ja existe esse usuario
+        // eslint-disable-next-line
+        // if (this.getUserLoginInformation(exerciseData.email)) throw "Usuário ja cadastrado"
+        
+        let exercises = this.getExerciseList();
+        exercises.push({
+            ...exerciseData, id:exercises.length
+        })
+        window.localStorage.setItem("exercises",JSON.stringify(exercises));
+    }
+
+
     static getUserLoginInformation(email){
         let exists= null;
         let logins = this.getLoginsList();
@@ -19,6 +61,9 @@ class LocalStorage{
 
         return logins;
     }
+
+
+   
 
 
     static storeUserData(userData){

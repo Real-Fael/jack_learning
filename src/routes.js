@@ -11,7 +11,7 @@ import Home from "./views/pages/home";
 
 import Login from "./views/pages/login"
 import Logout from './views/pages/logout';
-import MyBlocklyEditor2 from "./views/pages/newExercise";
+import NewExercise from "./views/pages/newExercise";
 import Register from "./views/pages/register";
 
 class MyRoutes extends React.Component{
@@ -43,7 +43,8 @@ class MyRoutes extends React.Component{
                 <Route  path='/register' element={<Register alertControll={this.alertControll}/>} />
                 <Route  path='/login' element={<Login alertControll={this.alertControll}/>}  />
                 <Route  path='/Exercise' element={<Exercise/>} />
-                <Route  path='/NewExercise' element={<MyBlocklyEditor2/>} />
+                <Route  path='/Exercise/:param' element={<Exercise/>} />
+                <Route  path='/NewExercise' element={<NewExercise/>} />
                 <Route  path='/logout' element={<Logout/>} />
             </Routes>
         </BrowserRouter>

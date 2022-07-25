@@ -26,12 +26,13 @@
     position: absolute;
     width: calc(100% * 1/ 3);
     right: calc(100% * 2 / 3);
-    top: 0;
+    top: 16px;
     bottom: 0;
     left: 0;
+    overflow: scroll;
 }
 .column{
-    background-color: #0062ac;
+    background-color: #ffffff;
     
     display: inline-block;
 }

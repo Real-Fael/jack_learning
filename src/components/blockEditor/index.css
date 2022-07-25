@@ -29,7 +29,7 @@
 
 .blockly-panel {
     top: 0px;
-    left: 0px;
+    left: 4px;
     right: 0px;
     height: 70%;
     box-shadow: 0 1px 4px rgba(0,0,0,.37);
@@ -41,7 +41,7 @@
     margin-block-end: auto; */
     top: auto;
     right: 0px;
-    left: 0px;
+    left: 4px;
     height: 29.5%;
     /* width: 282px; */
     background-color: white;
