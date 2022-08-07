@@ -44,6 +44,10 @@ class BlocklyExecControll extends React.Component{
     if (props.updateActions)
       props.updateActions(func)
     console.log(props.updateActions)
+
+    //delete
+    this.exerciseData = props.exerciseData
+    this.sendSolution = props.sendSolution
   }
 
   getOutput = () =>{
@@ -102,6 +106,10 @@ class BlocklyExecControll extends React.Component{
     console.log(splitline.getNextValue())
 
   }
+  submitSolution = (event) =>{
+    // console.log(this.exerciseData)
+    this.sendSolution()
+  }
   
   render() {
     const Item = styled(Paper)(({ theme }) => ({
@@ -121,7 +129,7 @@ class BlocklyExecControll extends React.Component{
           <div className="main output-panel">
             <button onClick={this.execCode} >Executar</button>
             <button onClick={this.testeInput}>Parar</button>
-            <button >Enviar</button>
+            <button onClick={this.submitSolution}>Enviar</button>
             <br></br>
         
             <textarea ref={this.dataInput} className='textarea input'></textarea>

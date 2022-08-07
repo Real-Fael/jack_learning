@@ -6,7 +6,7 @@ class LocalStorage{
         let exists= null;
         let exercise = this.getExerciseList();
         for(let i=0;i<exercise.length;i++){
-            console.log(exercise[i].id , exerciseId )
+            // console.log(exercise[i].id , exerciseId )
             if(exercise[i].id===parseInt(exerciseId)) {
                 exists={...exercise[i]};
                 break;
