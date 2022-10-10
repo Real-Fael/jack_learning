@@ -14,6 +14,7 @@ import DraggableList from '../../../components/draggableList/DraggableList';
 import trailFeatures from "../../../data/trailFeatures.json"
 import TransferList from "../../../components/draggableList/TransferList";
 import ExerciseController from "../../../controller/ExerciseController";
+import { Label } from "recharts";
 
 const theme = createTheme();
 // a little function to help us with reordering the result
@@ -137,14 +138,17 @@ class NewExerciseTrail extends React.Component{
                                 autoComplete="given-name"
                                 />
                             </Grid>
+                            
+
                             <Grid item xs={12}>
                                 <ComboBox trailFeatures={trailFeatures.levels}></ComboBox>
                             </Grid>
+                            
                             <Grid item xs={12}>
                              <TransferList items={this.state.disponibleItems} choosedItems={this.state.choosedItems} setChoosedItems={this.setItems} onDragEnd={this.onDragEnd}></TransferList>
                             </Grid>
                             
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                 autoComplete="given-name"
                                 name="firstName"
@@ -157,7 +161,7 @@ class NewExerciseTrail extends React.Component{
                             </Grid>
                             <Grid item xs={12} sm={6}>
                             <DraggableList items={this.state.choosedItems} onDragEnd={this.onDragEnd} />
-                            </Grid>
+                            </Grid> */}
                             
                             </Grid>
                             <Button

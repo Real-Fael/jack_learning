@@ -7,7 +7,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import { Avatar, ListItemAvatar } from '@mui/material';
+import { Avatar, Card, CardHeader, Divider, ListItemAvatar } from '@mui/material';
 import TaskIcon from '@mui/icons-material/Task';
 import DraggableListItem from './DraggableListItem';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
@@ -18,6 +18,9 @@ function not(a, b) {
 
 function intersection(a, b) {
   return a.filter((value) => b.indexOf(value) !== -1);
+}
+function union(a, b) {
+  return [...a, ...not(b, a)];
 }
 
 export default function TransferList(props) {
@@ -46,6 +49,17 @@ export default function TransferList(props) {
     setChecked(newChecked);
   };
 
+  const numberOfChecked = (items) => intersection(checked, items).length;
+
+  //verifica se todos os items estão marcados
+  const handleToggleAll = (items) => () => {
+    if (numberOfChecked(items) === items.length) {
+      setChecked(not(checked, items));
+    } else {
+      setChecked(union(checked, items));
+    }
+  };
+
   //envia elemos da esquerda pra direita
   const handleAllRight = () => {
     setRight(right.concat(left));
@@ -70,8 +84,28 @@ export default function TransferList(props) {
   };
 
   // Cria a lista e os seus elementos
-  const customList = (items,onDragEnd) => (
-    <Paper sx={{ width: 300, height: 230, overflow: 'auto' }}>
+  const customList = (items,title,onDragEnd) => (
+    <Paper sx={{ width: 300, height: 430, overflow: 'auto' }}>
+      <Card>
+      <CardHeader
+        sx={{ px: 2, py: 1 }}
+        avatar={
+          <Checkbox
+            onClick={handleToggleAll(items)}
+            checked={numberOfChecked(items) === items.length && items.length !== 0}
+            indeterminate={
+              numberOfChecked(items) !== items.length && numberOfChecked(items) !== 0
+            }
+            disabled={items.length === 0}
+            inputProps={{
+              'aria-label': 'all items selected',
+            }}
+          />
+        }
+        title={title}
+        subheader={`${numberOfChecked(items)}/${items.length} selected`}
+      />
+      <Divider />
 
         <DragDropContext onDragEnd={onDragEnd!==null?onDragEnd:()=>{}}>
             <Droppable droppableId="droppable-list">
@@ -92,6 +126,7 @@ export default function TransferList(props) {
                 )}
             </Droppable>
         </DragDropContext>
+      </Card>
       {/* <List dense component="div" role="list">
         
       {provided => (
@@ -152,7 +187,7 @@ export default function TransferList(props) {
 
   return (
     <Grid container spacing={2} justifyContent="center" alignItems="center">
-      <Grid item>{customList(left)}</Grid>
+      <Grid item>{customList(left,"Exercícios Disponíveis")}</Grid>
       <Grid item>
         <Grid container direction="column" alignItems="center">
           <Button
@@ -197,7 +232,7 @@ export default function TransferList(props) {
           </Button>
         </Grid>
       </Grid>
-      <Grid item>{customList(right,props.onDragEnd)}</Grid>
+      <Grid item>{customList(right,"Exercícios Selecionados",props.onDragEnd)}</Grid>
     </Grid>
   );
 }
