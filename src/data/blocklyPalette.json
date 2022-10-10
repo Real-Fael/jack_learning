@@ -1,31 +1,45 @@
 {
   "contents": [
     
-    {   "name": "teste",
+    {   "name": "Leitura",
         "kind": "CATEGORY",
         "contents": [{
             "type": "read",
             "kind": "BLOCK"
-            
-          },{
+          }],
+
+        "categorystyle": "logic_category"
+        
+    },
+    {   "name": "Escrita",
+        "kind": "CATEGORY",
+        "contents": [{
             "type": "write",
             "kind": "BLOCK"
             
-          },{
+        },{
             "type": "writeln",
             "kind": "BLOCK"
             
-          },{
+        }],
+
+    "categorystyle": "logic_category"
+    
+    },
+    {   "name": "Tipagem",  
+        "kind": "CATEGORY",
+        "contents": [{
             "type": "str_to_number",
             "kind": "BLOCK"
             
-          }],
+        }],
 
         "categorystyle": "logic_category"
         
     },
       {   "name": "Logica",
           "kind": "CATEGORY",
+          
           "contents": [
               {
                   "kind": "BLOCK",

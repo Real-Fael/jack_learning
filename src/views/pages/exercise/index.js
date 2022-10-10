@@ -200,11 +200,6 @@ class Exercise extends React.Component{
                     <div className="column describe">
                        
                         <Infotemplate exerciseRef={this.exerciseRef} ></Infotemplate>
-                        
-                        
-
-
-
 
                     </div>
                     <div  className="workSpace">

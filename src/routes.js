@@ -2,6 +2,7 @@ import * as React from 'react';
 import { BrowserRouter, Route,Routes} from 'react-router-dom';
 import Navbar from "./components/navbar";
 import Exercise from "./views/pages/exercise";
+import ExerciseTrail from './views/pages/exerciseTrail';
 import Home from "./views/pages/home";
 
 
@@ -12,6 +13,7 @@ import Home from "./views/pages/home";
 import Login from "./views/pages/login"
 import Logout from './views/pages/logout';
 import NewExercise from "./views/pages/newExercise";
+import NewExerciseTrail from './views/pages/newExerciseTrail';
 import Register from "./views/pages/register";
 
 class MyRoutes extends React.Component{
@@ -45,6 +47,10 @@ class MyRoutes extends React.Component{
                 <Route  path='/Exercise' element={<Exercise/>} />
                 <Route  path='/Exercise/:param' element={<Exercise/>} />
                 <Route  path='/NewExercise' element={<NewExercise/>} />
+                <Route  path='/NewExerciseTrail' element={<NewExerciseTrail/>} />
+                <Route  path='/ExerciseTrail' element={<ExerciseTrail/>} />
+                <Route  path='/ExerciseTrail/:param' element={<ExerciseTrail/>} />
+                
                 <Route  path='/logout' element={<Logout/>} />
             </Routes>
         </BrowserRouter>
