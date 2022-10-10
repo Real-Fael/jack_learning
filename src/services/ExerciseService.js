@@ -27,6 +27,17 @@ class ExerciseService{
         }
     }
 
+    static getExerciseList(){
+        
+        
+        try{
+            return LocalStorage.getExerciseList();
+
+        }catch(e){
+            throw e;
+        }
+    }
+
 }
 
 

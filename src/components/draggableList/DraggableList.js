@@ -19,7 +19,7 @@ const DraggableList = React.memo(({ items, onDragEnd }) => {
         {provided => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
             {items.map((item, index) => (
-              <DraggableListItem item={item} index={index} key={item.id} />
+             <></> // <DraggableListItem item={item} index={index} key={item.id} />
             ))}
             {provided.placeholder}
           </div>

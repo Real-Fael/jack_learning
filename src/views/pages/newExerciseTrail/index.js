@@ -13,6 +13,7 @@ import DraggableList from '../../../components/draggableList/DraggableList';
 
 import trailFeatures from "../../../data/trailFeatures.json"
 import TransferList from "../../../components/draggableList/TransferList";
+import ExerciseController from "../../../controller/ExerciseController";
 
 const theme = createTheme();
 // a little function to help us with reordering the result
@@ -51,6 +52,8 @@ export const reorder =(
 function ComboBox(props) {
     return (
       <Autocomplete
+        aria-required={true}
+        defaultValue={props.trailFeatures[0]}
         disablePortal
         id="combo-box-demo"
         options={props.trailFeatures}
@@ -65,13 +68,16 @@ class NewExerciseTrail extends React.Component{
     constructor(props){
         super(props);
         console.log(props)
-
+        let exerciseList= ExerciseController.getExerciseList()
+        console.log("exerciseList")
+        console.log(exerciseList)
         const data= UsersController.getSession(); 
         this.state={
             session:{
                 ...data
             },
-            choosedItems:getItems(10)
+            disponibleItems: exerciseList,//getItems(10),
+            choosedItems:[]//getItems(1)
 
         }
         // const classes = useStyles();
@@ -82,11 +88,12 @@ class NewExerciseTrail extends React.Component{
         
         this.setState({choosedItems:newItems})
     }
-    onDragEnd = ({ destination, source }) => {
+    onDragEnd = (onDragEndProps) => {
         // dropped outside the list
-        if (!destination) return;
+        console.log(onDragEndProps)
+        if (!onDragEndProps.destination) return;
     
-        const newItems = reorder(this.state.choosedItems, source.index, destination.index);
+        const newItems = reorder(this.state.choosedItems, onDragEndProps.source.index, onDragEndProps.destination.index);
     
         this.setItems(newItems);
       };
@@ -134,7 +141,7 @@ class NewExerciseTrail extends React.Component{
                                 <ComboBox trailFeatures={trailFeatures.levels}></ComboBox>
                             </Grid>
                             <Grid item xs={12}>
-                             <TransferList></TransferList>
+                             <TransferList items={this.state.disponibleItems} choosedItems={this.state.choosedItems} setChoosedItems={this.setItems} onDragEnd={this.onDragEnd}></TransferList>
                             </Grid>
                             
                             <Grid item xs={12} sm={6}>
@@ -161,13 +168,7 @@ class NewExerciseTrail extends React.Component{
                             >
                             Criar Nova Trilha
                             </Button>
-                            <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link href="/login" variant="body2">
-                                Ja tem uma conta? faça login
-                                </Link>
-                            </Grid>
-                            </Grid>
+                            
                         </Box>
                     </Box>
 

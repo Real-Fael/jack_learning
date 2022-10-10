@@ -9,6 +9,8 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import { Avatar, ListItemAvatar } from '@mui/material';
 import TaskIcon from '@mui/icons-material/Task';
+import DraggableListItem from './DraggableListItem';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -18,17 +20,21 @@ function intersection(a, b) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 
-export default function TransferList() {
+export default function TransferList(props) {
   const [checked, setChecked] = React.useState([]);
-  const [left, setLeft] = React.useState([0, 1, 2, 3]);
-  const [right, setRight] = React.useState([4, 5, 6, 7]);
+  
+  console.log(props.choosedItems)
+  const [left, setLeft] = React.useState(props.items);
+  let right = props.choosedItems
+  const setRight = props.setChoosedItems//React.useState([]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
-
+//   const rightChecked=[]
   //verifica se o componente esta com checked, se tiver, remove, se nao tiver, inclui
   const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
+    // const currentIndex = checked.indexOf(value);
+    const currentIndex = checked.map(e => e.id).indexOf(value.id);
     const newChecked = [...checked];
 
     if (currentIndex === -1) {
@@ -64,14 +70,51 @@ export default function TransferList() {
   };
 
   // Cria a lista e os seus elementos
-  const customList = (items) => (
+  const customList = (items,onDragEnd) => (
     <Paper sx={{ width: 300, height: 230, overflow: 'auto' }}>
-      <List dense component="div" role="list">
-        {items.map((value) => {
-          const labelId = `transfer-list-item-${value}-label`;
 
-          return (
-            <ListItem
+        <DragDropContext onDragEnd={onDragEnd!==null?onDragEnd:()=>{}}>
+            <Droppable droppableId="droppable-list">
+                {provided => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                    {items.map((item, index) => (
+                        <DraggableListItem handleToggle= {handleToggle}
+                        item= {item}
+                        key={item.id}
+                        index={index}
+                        checked={checked.indexOf(item) !== -1}
+                        labelId={item.id}
+                        
+                        />
+                    ))}
+                    {provided.placeholder}
+                </div>
+                )}
+            </Droppable>
+        </DragDropContext>
+      {/* <List dense component="div" role="list">
+        
+      {provided => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+                {items.map((item,index) => {
+                    const labelId = `transfer-list-item-${item}-label`;
+
+                    return (
+                        // <></>
+                        <DraggableListItem handleToggle= {handleToggle}
+                                        item= {item}
+                                        key={item.id}
+                                        index={index}
+                                        checked={checked.indexOf(item) !== -1}
+                                        labelId={labelId}
+                                        
+                                        />
+                                        )
+                                        })}
+                
+                </div> 
+        )}
+        {/*     <ListItem
               key={value}
               role="listitem"
               button
@@ -101,8 +144,9 @@ export default function TransferList() {
             </ListItem>
           );
         })}
-        <ListItem />
-      </List>
+        <ListItem /> 
+        
+      </List> */}
     </Paper>
   );
 
@@ -153,7 +197,7 @@ export default function TransferList() {
           </Button>
         </Grid>
       </Grid>
-      <Grid item>{customList(right)}</Grid>
+      <Grid item>{customList(right,props.onDragEnd)}</Grid>
     </Grid>
   );
 }

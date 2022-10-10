@@ -26,6 +26,17 @@ class ExerciseController {
 
        
     }
+    static getExerciseList(){
+
+        try{
+            return ExerciseService.getExerciseList()
+
+        }catch(e){
+            throw e;
+        }
+
+       
+    }
 }
 
 export default ExerciseController;
