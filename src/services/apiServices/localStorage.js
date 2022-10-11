@@ -13,8 +13,6 @@ class LocalStorage{
             }
         }
         return exists;
-
-
     }
 
 
@@ -94,7 +92,41 @@ class LocalStorage{
         return null;
     }
 
-   
+
+    static getTrailData(trailId){
+        let exists= null;
+        let trail = this.getTrailList();
+        for(let i=0;i<trail.length;i++){
+            // console.log(trail[i].id , trailId )
+            if(trail[i].id===parseInt(trailId)) {
+                exists={...trail[i]};
+                break;
+            }
+        }
+        return exists;
+    }
+
+    static getTrailList(){
+        let trail = [];
+        if (window.localStorage.hasOwnProperty("trail"))
+            trail = JSON.parse(window.localStorage.getItem("trail"));
+
+        return trail;
+    }
+
+
+    static storeTrailData(trailData){
+        
+        //caso retorne um objeto ja existe esse usuario
+        // eslint-disable-next-line
+        if (this.getUserLoginInformation(trailData.email)) throw "Usuário ja cadastrado"
+        
+        let trail = this.getTrailList();
+        trail.push({
+            ...trailData, id:trail.length
+        })
+        window.localStorage.setItem("trail",JSON.stringify(trail));
+    }
 
 }
 

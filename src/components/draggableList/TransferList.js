@@ -26,7 +26,7 @@ function union(a, b) {
 export default function TransferList(props) {
   const [checked, setChecked] = React.useState([]);
   
-  console.log(props.choosedItems)
+  // console.log(props.choosedItems)
   const [left, setLeft] = React.useState(props.items);
   let right = props.choosedItems
   const setRight = props.setChoosedItems//React.useState([]);

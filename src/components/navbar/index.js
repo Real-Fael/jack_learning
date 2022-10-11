@@ -65,7 +65,7 @@ class Navbar extends React.Component{
   };
   
   handleCloseUserMenu = (event) => {
-    console.log(event.currentTarget.getAttribute('href'))
+    // console.log(event.currentTarget.getAttribute('href'))
     this.setState({anchorElUser:null})
     // setAnchorElUser(null);
     // setRedirect(settingsRedirect[event.currentTarget.id]);
@@ -101,7 +101,7 @@ class Navbar extends React.Component{
   }
 
   UserMenu = () =>{
-    console.log(this.state.session)
+    // console.log(this.state.session)
     if (this.state.session.id !==-1) return <>
     <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Abrir configurações da conta">

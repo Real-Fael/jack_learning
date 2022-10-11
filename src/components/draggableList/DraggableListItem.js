@@ -24,8 +24,8 @@ const useStyles = makeStyles({
 
 const DraggableListItem = (props) => {
   const classes = useStyles();
-  console.log("draggableId")
-  console.log(props.item.id)
+  // console.log("draggableId")
+  // console.log(props.item.id)
 
   return (
     <Draggable draggableId={`${props.item.id+1}`} index={props.index}>

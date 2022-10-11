@@ -15,6 +15,8 @@ import trailFeatures from "../../../data/trailFeatures.json"
 import TransferList from "../../../components/draggableList/TransferList";
 import ExerciseController from "../../../controller/ExerciseController";
 import { Label } from "recharts";
+import { ErrorAlert, SuccessAlert } from "../../../components/alerts";
+import TrailController from "../../../controller/trailController";
 
 const theme = createTheme();
 // a little function to help us with reordering the result
@@ -56,7 +58,8 @@ function ComboBox(props) {
         aria-required={true}
         defaultValue={props.trailFeatures[0]}
         disablePortal
-        id="combo-box-demo"
+        id="comboBoxLevels"
+        name = "comboBoxLevels"
         options={props.trailFeatures}
         sx={{ width: "100%" }}
         renderInput={(params) => <TextField {...params} label="Nível" />}
@@ -68,10 +71,10 @@ class NewExerciseTrail extends React.Component{
     
     constructor(props){
         super(props);
-        console.log(props)
+        // console.log(props)
         let exerciseList= ExerciseController.getExerciseList()
-        console.log("exerciseList")
-        console.log(exerciseList)
+        // console.log("exerciseList")
+        // console.log(exerciseList)
         const data= UsersController.getSession(); 
         this.state={
             session:{
@@ -81,6 +84,8 @@ class NewExerciseTrail extends React.Component{
             choosedItems:[]//getItems(1)
 
         }
+        this.refForm= React.createRef();
+        this.alertControll = props.alertControll;
         // const classes = useStyles();
         // console.log(data)
         
@@ -91,7 +96,7 @@ class NewExerciseTrail extends React.Component{
     }
     onDragEnd = (onDragEndProps) => {
         // dropped outside the list
-        console.log(onDragEndProps)
+        // console.log(onDragEndProps)
         if (!onDragEndProps.destination) return;
     
         const newItems = reorder(this.state.choosedItems, onDragEndProps.source.index, onDragEndProps.destination.index);
@@ -99,6 +104,37 @@ class NewExerciseTrail extends React.Component{
         this.setItems(newItems);
       };
     
+    handleSubmit = (event) => {
+        event.preventDefault();
+        
+    
+        let trailData = {
+            trailName: this.refForm.current.trailName.value,
+            difficultyLevel: this.refForm.current.comboBoxLevels.value,
+            exercisesTrail: this.state.choosedItems,
+            creatorTrail: this.state.session,
+            trailDescription:this.refForm.current.description.value
+            
+        }
+
+        console.log(trailData);
+        try{
+            TrailController.registerCheck(trailData)
+
+            this.alertControll.changeAlert(<SuccessAlert closeAlert= {this.alertControll.closeAlert} message="Trilha criada com sucesso" ></SuccessAlert>)
+
+        }catch(e){
+            // console.log(e)
+            this.alertControll.changeAlert(<ErrorAlert closeAlert= {this.alertControll.closeAlert} message= {e}></ErrorAlert>)
+            return
+        }
+
+        // window.location.href = "/login"
+        
+
+      };
+
+
     render() {
 
         // const { studentId } = useParams();
@@ -136,6 +172,18 @@ class NewExerciseTrail extends React.Component{
                                 label="Nome da trilha"
                                 id="trailName"
                                 autoComplete="given-name"
+                                />
+                            </Grid>
+                            <Grid item xs={12} >
+                                <TextField
+                                multiline
+                                maxRows={5}
+                                required
+                                fullWidth
+                                name="description"
+                                label="Descrição"
+                                id="description"
+                                // autoComplete="given-name"
                                 />
                             </Grid>
                             

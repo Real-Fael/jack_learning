@@ -47,7 +47,7 @@ class MyRoutes extends React.Component{
                 <Route  path='/Exercise' element={<Exercise/>} />
                 <Route  path='/Exercise/:param' element={<Exercise/>} />
                 <Route  path='/NewExercise' element={<NewExercise/>} />
-                <Route  path='/NewExerciseTrail' element={<NewExerciseTrail/>} />
+                <Route  path='/NewExerciseTrail' element={<NewExerciseTrail alertControll={this.alertControll}/>} />
                 <Route  path='/ExerciseTrail' element={<ExerciseTrail/>} />
                 <Route  path='/ExerciseTrail/:param' element={<ExerciseTrail/>} />
                 
