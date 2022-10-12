@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import UsersController from '../../controller/userController';
+import { stringAvatar } from '../../controller/utilsController';
 
 const pagesRedirect = {'Home':'/', 'Exercicio':'/Exercise', 'Documentação':'/documentation'};
 const settingsRedirect = {'Profile':'/Profile', 'Account':'/Account', 'Dashboard':'/Dashboard', 'Logout':'/Logout'};
@@ -21,6 +22,9 @@ const nonLogedRedirect = {'Acessar':'/login','Cadastrar':'/register'}
 const pages = Object.keys(pagesRedirect)//['Products', 'Pricing', 'Blog'];
 const settings = Object.keys(settingsRedirect);// ['Profile', 'Account', 'Dashboard', 'Logout'];
 const nonLoged = Object.keys(nonLogedRedirect);
+
+
+
 
 class Navbar extends React.Component{
 
@@ -71,34 +75,7 @@ class Navbar extends React.Component{
     // setRedirect(settingsRedirect[event.currentTarget.id]);
     this.redirect(event.currentTarget.getAttribute('href'))
   };
-  stringToColor = (string)=> {
-    let hash = 0;
-    let i;
   
-    /* eslint-disable no-bitwise */
-    for (i = 0; i < string.length; i += 1) {
-      hash = string.charCodeAt(i) + ((hash << 5) - hash);
-    }
-  
-    let color = '#';
-  
-    for (i = 0; i < 3; i += 1) {
-      const value = (hash >> (i * 8)) & 0xff;
-      color += `00${value.toString(16)}`.slice(-2);
-    }
-    /* eslint-enable no-bitwise */
-  
-    return color;
-  }
-  
-  stringAvatar = (name)=> {
-    return {
-      sx: {
-        bgcolor: this.stringToColor(name),
-      },
-      children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-    };
-  }
 
   UserMenu = () =>{
     // console.log(this.state.session)
@@ -106,7 +83,7 @@ class Navbar extends React.Component{
     <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Abrir configurações da conta">
               <IconButton onClick={this.handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar {...this.stringAvatar(this.state.session.firstName +' '+ this.state.session.lastName)} src="/static/images/avatar/5.jpg" />
+                <Avatar {...stringAvatar(this.state.session.firstName +' '+ this.state.session.lastName)} src="/static/images/avatar/5.jpg" />
               </IconButton>
             </Tooltip>
             <Menu

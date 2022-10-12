@@ -17,6 +17,7 @@ import ExerciseController from "../../../controller/ExerciseController";
 import { Label } from "recharts";
 import { ErrorAlert, SuccessAlert } from "../../../components/alerts";
 import TrailController from "../../../controller/trailController";
+import { ComboBox } from "../../../components/comboBox";
 
 const theme = createTheme();
 // a little function to help us with reordering the result
@@ -52,20 +53,7 @@ export const reorder =(
 //   });
 
 
-function ComboBox(props) {
-    return (
-      <Autocomplete
-        aria-required={true}
-        defaultValue={props.trailFeatures[0]}
-        disablePortal
-        id="comboBoxLevels"
-        name = "comboBoxLevels"
-        options={props.trailFeatures}
-        sx={{ width: "100%" }}
-        renderInput={(params) => <TextField {...params} label="Nível" />}
-      />
-    );
-  }
+
 
 class NewExerciseTrail extends React.Component{
     
