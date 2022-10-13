@@ -2,7 +2,6 @@ import * as React from 'react';
 import { BrowserRouter, Route,Routes} from 'react-router-dom';
 import Navbar from "./components/navbar";
 import Exercise from "./views/pages/exercise";
-import ExerciseTrail from './views/pages/exerciseTrail';
 import Home from "./views/pages/home";
 
 
@@ -15,6 +14,8 @@ import Logout from './views/pages/logout';
 import NewExercise from "./views/pages/newExercise";
 import NewExerciseTrail from './views/pages/newExerciseTrail';
 import Register from "./views/pages/register";
+import ListExerciseTrail from './views/pages/listExerciseTrail';
+import ExerciseTrail from './views/pages/exerciseTrail';
 
 class MyRoutes extends React.Component{
 
@@ -44,11 +45,11 @@ class MyRoutes extends React.Component{
                 <Route exact path='/' element={<Home/>} />
                 <Route  path='/register' element={<Register alertControll={this.alertControll}/>} />
                 <Route  path='/login' element={<Login alertControll={this.alertControll}/>}  />
-                <Route  path='/Exercise' element={<Exercise/>} />
+                {/* <Route  path='/Exercise' element={<Exercise/>} /> */}
                 <Route  path='/Exercise/:param' element={<Exercise/>} />
                 <Route  path='/NewExercise' element={<NewExercise/>} />
                 <Route  path='/NewExerciseTrail' element={<NewExerciseTrail alertControll={this.alertControll}/>} />
-                <Route  path='/ExerciseTrail' element={<ExerciseTrail alertControll={this.alertControll} />} />
+                <Route  path='/ExerciseTrail' element={<ListExerciseTrail alertControll={this.alertControll} />} />
                 <Route  path='/ExerciseTrail/:param' element={<ExerciseTrail alertControll={this.alertControll}/>}  />
                 
                 <Route  path='/logout' element={<Logout/>} />

@@ -2,8 +2,19 @@ import LocalStorage from "./apiServices/localStorage";
 
 class ExerciseService{
 
-    
    
+   
+    static saveExerciseSolution(solutionData){
+        
+        
+        try{
+            LocalStorage.updateUserData(solutionData);
+
+        }catch(e){
+            throw e;
+        }
+    }
+
     static registerExercise(ExerciseData){
         
         

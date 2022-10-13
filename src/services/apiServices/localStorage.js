@@ -39,6 +39,11 @@ class LocalStorage{
     }
 
 
+    
+
+
+
+
     static getUserLoginInformation(email){
         let exists= null;
         let logins = this.getLoginsList();
@@ -49,8 +54,6 @@ class LocalStorage{
             }
         }
         return exists;
-
-
     }
     static getLoginsList(){
         let logins = [];
@@ -62,7 +65,34 @@ class LocalStorage{
 
 
    
+    // static getUserData(userId){
+    //     let exists= null;
+    //     let user = this.getLoginsList();
+    //     for(let i=0;i<user.length;i++){
+    //         // console.log(user[i].id , userId )
+    //         if(user[i].id===parseInt(userId)) {
+    //             exists={...user[i]};
+    //             break;
+    //         }
+    //     }
+    //     return exists;
+    // }
 
+   
+
+    static updateUserData(userData){
+        
+        //caso retorne um objeto ja existe esse usuario
+        // eslint-disable-next-line
+        // if (this.getUserLoginInformation(userData.email)) throw "Usuário ja cadastrado"
+        let logins = this.getLoginsList();
+        let updateData = {...userData}
+        delete updateData.id
+        logins[userData.id]={
+            ...updateData
+        }
+        window.localStorage.setItem("logins",JSON.stringify(logins));
+    }
 
     static storeUserData(userData){
         

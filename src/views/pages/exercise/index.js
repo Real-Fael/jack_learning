@@ -18,8 +18,12 @@ const theme = createTheme();
 const Infotemplate = (props) =>{
     const {param} = useParams()
     console.log(param)
+    let params = param.split("-")
+    let trailId=params[0]
+    let maxLenghtTrail=params[1]
+    let exerciseId=params[2]
     console.log("exercise")
-    let exercise = ExerciseController.getExercise(param)
+    let exercise = ExerciseController.getExercise(exerciseId)
     
     console.log(exercise)
     if (!exercise){
@@ -33,7 +37,7 @@ const Infotemplate = (props) =>{
             {exercise.title}
         </Typography>
         <Typography sx={{ "textAlign": 'center'}} variant="caption" display="block" gutterBottom id="id_exercise">
-        n°:{exercise.id}
+        n°:{trailId}-{maxLenghtTrail}-{exercise.id}
         </Typography>
 
 
@@ -97,9 +101,9 @@ class Exercise extends React.Component{
     
     constructor(props){
         super(props);
-        console.log(props)
+        // console.log(props)
         // this.handleReservation = this.handleReservation.bind(this)
-        console.log(this.props.match)
+        // console.log(this.props.match)
         
         // this.refForm= React.createRef();
         const data= UsersController.getSession(); 
@@ -122,9 +126,9 @@ class Exercise extends React.Component{
     
     updateExerciseData = (exerciseData) =>{
 
-        console.log("update exercise Data")
+        // console.log("update exercise Data")
         this.exerciseData = exerciseData
-        console.log(this.exerciseData)
+        // console.log(this.exerciseData)
         // this.setState({
         //     exerciseData:exerciseData
         //   })
@@ -136,20 +140,29 @@ class Exercise extends React.Component{
             let output = element.children[1].children[1].children[`output-${pos}`].textContent
             return {input,output}
         })
+        let ids = this.exerciseRef.current.children.id_exercise.textContent.split(":")[1].split("-")
+        let trailId=parseInt(ids[0])
+        let maxLenghtTrail=parseInt(ids[1])
+        let exerciseId=parseInt(ids[2])
 
         let IOData = {
             title:this.exerciseRef.current.children.title.textContent,
-            id: this.exerciseRef.current.children.id_exercise.textContent.split(":")[1],
+            id: exerciseId,
+            trailId,
+            maxLenghtTrail,
             description:this.exerciseRef.current.children.title.textContent,
             //ajustar
-            IOlist
+            IOlist,
+            userData:{...this.state.session}
         }
+        
+        console.log(IOData)
         // console.log(IOData.title)
         // console.log(IOData.description)
         // console.log(this.refIO)
         let IOLen = IOData.IOlist.length;
 
-        console.log(IOLen)
+        // console.log(IOLen)
         IOData["xml"] = this.state.getXML()
 
         if (!IOData["xml"] || IOData["xml"] ===`<xml xmlns="https://developers.google.com/blockly/xml"></xml>`){
@@ -173,8 +186,10 @@ class Exercise extends React.Component{
             // console.log(this.refForm.current[`output-${i}`].value)
             // IOData["IOlist"].push(IOobject)
         }
-
+        
+        ExerciseController.saveExerciseSolution(IOData)
         alert(`PARABENS O ALGORITMO FUNCIONOU PARA TODOS OS CASOS`)
+        window.location.href =`/exerciseTrail/${trailId}`
 
     }
     updateActions = ({executeXML, setInput, getOutput, getXML})=> {

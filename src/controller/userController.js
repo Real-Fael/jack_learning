@@ -29,6 +29,13 @@ class UsersController {
         }  
     }
     
+    static getUserData(email){
+      
+        const user= UserService.getUserData(email);
+        return user
+        //return (!!user)? user:{id:-1,user:""}//Padronização para quando nao houver sessao ativa
+    }
+
     static getSession(){
       
       const session= UserService.getSession();
