@@ -130,6 +130,10 @@ class ListExerciseTrail extends React.Component{
 
         // const { studentId } = useParams();
 
+        if (this.state.session.id ===-1){
+            window.location.href = "/login"
+            return <></>
+        }
         return (
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xs">

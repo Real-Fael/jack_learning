@@ -4,9 +4,9 @@ import React, { memo } from "react";
 import "../exercise/index.css"
 import palette from "../../../data/blocklyPalette.json"
 import BlocklyExecControll from "../../../components/blocklyExecControll";
-import { createTheme, ThemeProvider,Container,CssBaseline, Typography, Box, TextField } from '@mui/material';
+import { createTheme, ThemeProvider,Container,CssBaseline, Typography, Box, TextField, Fab, FormControl } from '@mui/material';
 import UsersController from "../../../controller/userController";
-import { Fab, FormControl } from "@material-ui/core";
+// import {  } from "@material-ui/core";
 // import {AddIcon,NavigationIcon,FavoriteIcon, EditIcon  }  from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -163,7 +163,14 @@ class NewExercise extends React.Component{
 
 
     render() {
-        
+        if (this.state.session.id ===-1){
+            window.location.href = "/login"
+            return <></>
+        }
+        if (!this.state.session.isteacher){
+            window.location.href = "/exercisetrail"
+            return <></>
+        }
         return (
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xs">

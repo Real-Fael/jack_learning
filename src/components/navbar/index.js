@@ -16,10 +16,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import UsersController from '../../controller/userController';
 import { stringAvatar } from '../../controller/utilsController';
 
-const pagesRedirect = {'Home':'/', 'Exercicio':'/Exercise', 'Documentação':'/documentation'};
-const settingsRedirect = {'Profile':'/Profile', 'Account':'/Account', 'Dashboard':'/Dashboard', 'Logout':'/Logout'};
+const pagesRedirect = {'Home':'/', 'Trilhas':'/Exercisetrail', 'Documentação':'/documentation'};
+const teacherPagesRedirect = {'Home':'/', 'Trilhas':'/ExerciseTrail', 'Documentação':'/documentation','Criar Trilha':'/newExerciseTrail','Criar exercicio':'/newExercise'};
+const settingsRedirect = {'Profile':'/Profile', 'Account':'/Account', 'Logout':'/Logout'};
 const nonLogedRedirect = {'Acessar':'/login','Cadastrar':'/register'}
 const pages = Object.keys(pagesRedirect)//['Products', 'Pricing', 'Blog'];
+const teacherPages = Object.keys(teacherPagesRedirect)//['Products', 'Pricing', 'Blog'];
 const settings = Object.keys(settingsRedirect);// ['Profile', 'Account', 'Dashboard', 'Logout'];
 const nonLoged = Object.keys(nonLogedRedirect);
 
@@ -224,8 +226,8 @@ class Navbar extends React.Component{
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem id={page} key={page} href={pagesRedirect[page]} onClick={this.handleCloseNavMenu} >
+              {(this.state.session.isteacher?teacherPages:pages).map((page) => (
+                <MenuItem id={page} key={page} href={(this.state.session.isteacher?teacherPagesRedirect:pagesRedirect)[page]} onClick={this.handleCloseNavMenu} >
                   <Typography textAlign="center" >{page}</Typography>
                 </MenuItem>
               ))}
@@ -252,12 +254,12 @@ class Navbar extends React.Component{
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {   
-            pages.map((page) => (
+            (this.state.session.isteacher?teacherPages:pages).map((page) => (
               <Button
                 id={page}
                 key={page}
                 onClick={this.handleCloseNavMenu}
-                href={pagesRedirect[page]}
+                href={(this.state.session.isteacher?teacherPagesRedirect:pagesRedirect)[page]}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}

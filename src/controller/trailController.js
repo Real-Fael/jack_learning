@@ -5,7 +5,7 @@ class TrailController {
  
     static registerCheck(trailData){
 
-        if (!trailData.trailName || !trailData.difficultyLevel||!trailData.trailDescription || !(trailData.exercisesTrail.length!==0)) 
+        if (!trailData.trailName || !trailData.difficultyLevel || !trailData.trailDescription|| !trailData.congratulationsMessage || !(trailData.exercisesTrail.length!==0)) 
             // eslint-disable-next-line
             throw "Todos os campos devem ser preenchidos";
         if (!trailData.creatorTrail.isteacher)

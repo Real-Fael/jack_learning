@@ -9,6 +9,7 @@ import { createTheme, ThemeProvider,Container,CssBaseline, Typography, Box, Text
 import UsersController from "../../../controller/userController";
 import { useParams } from "react-router-dom";
 import ExerciseController from "../../../controller/ExerciseController";
+import SucessAlertDialogSlide from "../../../components/userDialogue";
 
 
 
@@ -18,16 +19,20 @@ const theme = createTheme();
 const Infotemplate = (props) =>{
     const {param} = useParams()
     console.log(param)
+    const regex = new RegExp('^[0-9]*-[0-9]*-[0-9]*$');
     let params = param.split("-")
+    if (!regex.test(param) || params.length>4){
+        window.location.href = "/exerciseTrail"
+    }
     let trailId=params[0]
     let maxLenghtTrail=params[1]
-    let exerciseId=params[2]
+    let exerciseId=params[params.length-1]
     console.log("exercise")
     let exercise = ExerciseController.getExercise(exerciseId)
     
     console.log(exercise)
     if (!exercise){
-        // window.location.href = "/notfound"
+        window.location.href = "/exerciseTrail"
         return <>ERRO EXERCICIO NAO ENCONTRADO</>
     }
     // props.exerciseRef(exercise);
@@ -111,6 +116,7 @@ class Exercise extends React.Component{
             session:{
                 ...data
             },
+            message:null,
             executeXML:()=>{alert("none")},
             setInput:()=>{alert("none")},
             getOutput:()=>{alert("none")},
@@ -188,9 +194,13 @@ class Exercise extends React.Component{
         }
         
         ExerciseController.saveExerciseSolution(IOData)
-        alert(`PARABENS O ALGORITMO FUNCIONOU PARA TODOS OS CASOS`)
-        window.location.href =`/exerciseTrail/${trailId}`
+        // alert(`PARABENS O ALGORITMO FUNCIONOU PARA TODOS OS CASOS`)
+        this.setState({message: <SucessAlertDialogSlide action={this.redirect} actionParams={{href:`/exerciseTrail/${trailId}`}} enable={true} title={"Parabens!!!"} message={"Você é Demais!!! O Algoritmo funcionou para todos os casos!"}/>})
+        // window.location.href =`/exerciseTrail/${trailId}`
 
+    }
+    redirect = ({href})=>{
+        window.location.href = href
     }
     updateActions = ({executeXML, setInput, getOutput, getXML})=> {
         this.setState({
@@ -202,13 +212,16 @@ class Exercise extends React.Component{
     }
     
     render() {
-
-        // const { studentId } = useParams();
+        if (this.state.session.id ===-1){
+            window.location.href = "/login"
+            return <></>
+        }
 
         return (
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xs">
                 <CssBaseline />
+                {this.state.message}
             <div className="exercise" >
                
                

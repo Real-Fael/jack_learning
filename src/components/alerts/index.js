@@ -3,12 +3,18 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 
 export function SuccessAlert(props) {
-    
-  return (
-    <Stack sx={{ width: '100%' }} spacing={2}>
-      <Alert onClose={props.closeAlert} variant="filled" severity="success">{props.message|| "Sucesso" }</Alert>
-    </Stack>
-  );
+  if (props.closeAlert)  
+    return (
+      <Stack sx={{ width: '100%' }} spacing={2}>
+        <Alert onClose={props.closeAlert} variant="filled" severity="success">{props.message|| "Sucesso" }</Alert>
+      </Stack>
+    );
+    return (
+      <Stack sx={{ width: '100%' }} spacing={2}>
+        <Alert  variant="filled" severity="success">{props.message|| "Sucesso" }</Alert>
+      </Stack>
+    );
+  
 }
 
 export function ErrorAlert(props) {

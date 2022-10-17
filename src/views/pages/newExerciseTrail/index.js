@@ -101,7 +101,8 @@ class NewExerciseTrail extends React.Component{
             difficultyLevel: this.refForm.current.comboBoxLevels.value,
             exercisesTrail: this.state.choosedItems,
             creatorTrail: this.state.session,
-            trailDescription:this.refForm.current.description.value
+            trailDescription:this.refForm.current.description.value,
+            congratulationsMessage:this.refForm.current.congratulationsMessage.value
             
         }
 
@@ -117,7 +118,7 @@ class NewExerciseTrail extends React.Component{
             return
         }
 
-        // window.location.href = "/login"
+        window.location.href = "/exercisetrail"
         
 
       };
@@ -125,7 +126,14 @@ class NewExerciseTrail extends React.Component{
 
     render() {
 
-        // const { studentId } = useParams();
+        if (this.state.session.id ===-1){
+            window.location.href = "/login"
+            return <></>
+        }
+        if (!this.state.session.isteacher){
+            window.location.href = "/exercisetrail"
+            return <></>
+        }
 
         return (
             <ThemeProvider theme={theme}>
@@ -171,6 +179,18 @@ class NewExerciseTrail extends React.Component{
                                 name="description"
                                 label="Descrição"
                                 id="description"
+                                // autoComplete="given-name"
+                                />
+                            </Grid>
+                            <Grid item xs={12} >
+                                <TextField
+                                multiline
+                                maxRows={5}
+                                required
+                                fullWidth
+                                name="congratulationsMessage"
+                                label="Mensagem de parabenização"
+                                id="congratulationsMessage"
                                 // autoComplete="given-name"
                                 />
                             </Grid>

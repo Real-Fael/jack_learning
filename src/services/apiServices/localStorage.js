@@ -108,16 +108,16 @@ class LocalStorage{
     }
 
     static storeSession({id,email,firstName,lastName,isteacher}){
-        window.sessionStorage.setItem("session",JSON.stringify({id,email,firstName,lastName,isteacher}));
+        window.localStorage.setItem("session",JSON.stringify({id,email,firstName,lastName,isteacher}));
 
     }
     static deleteThisSession(){
-        if (window.sessionStorage.hasOwnProperty("session"))
-            window.sessionStorage.removeItem("session");
+        if (window.localStorage.hasOwnProperty("session"))
+            window.localStorage.removeItem("session");
     }
     static getSession(){
-        if (window.sessionStorage.hasOwnProperty("session"))
-            return JSON.parse(window.sessionStorage.getItem("session"));
+        if (window.localStorage.hasOwnProperty("session"))
+            return JSON.parse(window.localStorage.getItem("session"));
 
         return null;
     }
@@ -149,7 +149,7 @@ class LocalStorage{
         
         //caso retorne um objeto ja existe esse usuario
         // eslint-disable-next-line
-        if (this.getUserLoginInformation(trailData.email)) throw "Usuário ja cadastrado"
+        // if (this.getUserLoginInformation(trailData.email)) throw "trilha ja cadastrada"
         
         let trail = this.getTrailList();
         trail.push({

@@ -12,11 +12,13 @@ import { stringAvatar } from "../../../controller/utilsController";
 import {getWindowDimensions} from "../../../services/windowDimensions";
 import trailFeatures from "../../../data/trailFeatures.json"
 import { ComboBox } from "../../../components/comboBox";
-import { ErrorAlert } from "../../../components/alerts";
+import { SuccessAlert } from "../../../components/alerts";
 import { useParams } from "react-router";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { CircularProgressWithIcon } from "../../../components/circularProgress";
+import { Crib } from "@mui/icons-material";
+import SucessAlertDialogSlide from "../../../components/userDialogue";
 
 const theme = createTheme();
 
@@ -26,26 +28,77 @@ const pageSize=10
 let difficultyLevels  = [...trailFeatures.levels]
 difficultyLevels.push({"label":"Todos os Níveis","level":5})
 
-const ShowTrailExercises = (props) =>{
+function ExerciseTrail(props){
     const {param} = useParams()
     console.log(param)
     console.log("exercise")
-    let SelectedTrail = TrailController.getTrail(param)
-    let userData = UsersController.getUserData(props.state.session.email)
-    // if(props.state.selectedExercises.lenght===0) props.setSelectedExercises([...trail.exercisesTrail])
-    let state = props.state
-    // console.log(userData)
-    // console.log(props.state.session.email)
-    let paginationClick= props.paginationClick
+    const [sessionData, setSessionData] = React.useState(UsersController.getSession());
     
-    // console.log(SelectedTrail)
-    if (!SelectedTrail){
-        // window.location.href = "/notfound"
-        return <>ERRO TRILHA NAO ENCONTRADA</>
-    }
-    // props.trailRef(trail);
+    const [selectedTrail,setSelectedTrail]=React.useState(TrailController.getTrail(param))
 
-    const enableCardsVerify=(index)=>{
+    
+    const [dimensionPage,setDimensionPage]=React.useState(getWindowDimensions())
+    
+    const [pagination, setPagination] = React.useState(1);
+    console.log("selectedTrail")
+    console.log(selectedTrail)
+    
+
+    if (sessionData.id ===-1){
+        window.location.href = "/login"
+        return <></>
+    }
+    
+    if (!selectedTrail){
+        window.location.href = "/exercisetrail"
+        return <></>
+    }
+
+    let userData = UsersController.getUserData(sessionData.email)
+    // let difficultyLevels = difficultyLevels
+    let alertControll = props.alertControll
+    
+    var doit;
+    window.onresize = function(){
+        clearTimeout(doit);
+        doit = setTimeout(resizePage, 200);
+    };
+
+    // window.addEventListener('resize', resizePage);
+
+    let qtdSolved = (enableCardsVerify(-1)<0)?0:enableCardsVerify(-1)
+    let totalSolved=parseInt((qtdSolved/selectedTrail.exercisesTrail.length)*100)
+    let exercisePoints = parseInt(100/(selectedTrail.exercisesTrail.length))
+
+    if (totalSolved===100){
+        alertControll.changeAlert(<SuccessAlert  message= "PARABENS voce concluiu esta trilha" ></SuccessAlert>)    
+    }
+        // alert("PARABENS voce concluiu a trilha")
+
+    function resizePage(){
+        const windowSize=getWindowDimensions()
+        setDimensionPage(windowSize) 
+    }
+    function paginationClick (event){
+        
+        console.log(event.target.innerText)
+        if (event.target.getAttribute("data-testid")==="NavigateNextIcon"){
+            setPagination( pagination +1)
+            return
+        }
+        
+        if (event.target.getAttribute("data-testid")==="NavigateBeforeIcon"){
+            setPagination( pagination -1)
+            return
+        }
+        
+        if (Math.trunc(event.target.innerText)){
+            setPagination(Math.trunc(event.target.innerText))
+            return
+        }
+    }
+
+    function enableCardsVerify(index){
         // console.log(`${props.index}===${index}`)
         if (!userData.hasOwnProperty("trailSolved") ){
             return -2
@@ -55,11 +108,11 @@ const ShowTrailExercises = (props) =>{
         
         console.log("userData.trailSolved") 
         console.log(userData.trailSolved) 
-        console.log(SelectedTrail) 
+        console.log(selectedTrail) 
         console.log(index) 
         let find=-2
         userData.trailSolved.forEach((element,elementIndex) => {
-            if ((element.trail_id===SelectedTrail.id) && index<=element.qtdSolved ) find = element.qtdSolved
+            if ((element.trail_id===selectedTrail.id) && index<=element.qtdSolved ) find = element.qtdSolved
         });
 
         // userData.trailSolved
@@ -72,7 +125,7 @@ const ShowTrailExercises = (props) =>{
         if ( qtdSolved !==-2  || props.index===0 )
             return(<>
             
-            <CardActionArea href={`/exercise/${SelectedTrail.id}-${props.index}-${props.exercise.id}`}  sx={{ width: "100%",
+            <CardActionArea href={`/exercise/${selectedTrail.id}-${props.index}-${props.exercise.id}`}  sx={{ width: "100%",
                     height: "100%" }}   key={`${(props.exercise.id+1)}`} >
                         {/* <CardMedia
                             component="img"
@@ -92,22 +145,37 @@ const ShowTrailExercises = (props) =>{
                             // style={{ minHeight: '100vh' }}
                             >
                             <Grid item xs={3}>
-                                <Avatar {...stringAvatar(SelectedTrail.creatorTrail.firstName +' '+ SelectedTrail.creatorTrail.lastName)} src="/static/images/avatar/5.jpg" />
+                            <Avatar sx={{bgcolor: 'primary.main'}} children={`${(props.index+1)}`}  src="/static/images/avatar/5.jpg" />
                             </Grid>
                         </Grid>
                         {/* </IconButton> */}
                         <CardContent>
                         <Typography gutterBottom variant="title" component="h2" >
-                            {props.exercise.title}
+                            {`${props.exercise.title}`}
                         </Typography>
-                        <Typography gutterBottom variant="body2" component="h3" >
+                        {/* <Typography gutterBottom variant="body2" component="h3" >
                             {props.exercise.description}
-                        </Typography>
+                        </Typography> */}
                         {/* <Typography gutterBottom variant="body2" component="h4" align="right" >
                             {trail.difficultyLevel}
                         </Typography> */}
+                        <Grid
+                            container
+                            spacing={0}
+                            direction="column"
+                            alignItems="flex-end"
+                            justify="center"
+                            height={"100%"}
+                            
+                            // style={{ minHeight: '100vh' }}
+                            >
+                            <Grid item xs={3}>
+                                <Avatar sx={{bgcolor: "rgb(240,201,100)", width: 56, height: 56 }} children={`+${exercisePoints}p`}  src="/static/images/avatar/5.jpg" />
+                            </Grid>
+                        </Grid>
                         </CardContent>
-                         
+                        
+
                         <Grid
                             container
                             spacing={0}
@@ -125,7 +193,7 @@ const ShowTrailExercises = (props) =>{
                     </CardActionArea>
                     </>)
 
-        return(<CardActionArea href={`/exercise/${SelectedTrail.id}-${props.index}-${props.exercise.id}`}  sx={{ width: "100%",
+        return(<CardActionArea href={`/exercise/${selectedTrail.id}-${props.index}-${props.exercise.id}`}  sx={{ width: "100%",
                 height: "100%",background:"rgb(235,235,235)" }} disabled={true}  key={`${(props.exercise.id+1)}`} >
                     {/* <CardMedia
                         component="img"
@@ -145,173 +213,138 @@ const ShowTrailExercises = (props) =>{
                         // style={{ minHeight: '100vh' }}
                         >
                         <Grid item xs={3}>
-                            <Avatar {...stringAvatar(SelectedTrail.creatorTrail.firstName +' '+ SelectedTrail.creatorTrail.lastName)} src="/static/images/avatar/5.jpg" />
+                        <Avatar sx={{bgcolor: 'secondary.main'}} children={`${(props.index+1)}`}  src="/static/images/avatar/5.jpg" />
                         </Grid>
                     </Grid>
                     {/* </IconButton> */}
                     <CardContent>
                     <Typography gutterBottom variant="title" component="h2" >
-                        {props.exercise.title}
+                        {`${props.exercise.title}`}
                     </Typography>
-                    <Typography gutterBottom variant="body2" component="h3" >
+                    {/* <Typography gutterBottom variant="body2" component="h3" >
                         {props.exercise.description}
-                    </Typography>
+                    </Typography> */}
                     {/* <Typography gutterBottom variant="body2" component="h4" align="right" >
                         {trail.difficultyLevel}
                     </Typography> */}
+                    <Grid
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="flex-end"
+                        justify="center"
+                        height={"100%"}
+                        
+                        // style={{ minHeight: '100vh' }}
+                        >
+                        <Grid item xs={3}>
+                            <Avatar sx={{bgcolor: "rgb(240,201,100)", width: 56, height: 56 }} children={`+${exercisePoints}p`}  src="/static/images/avatar/5.jpg" />
+                        </Grid>
+                    </Grid>
+                        
                     </CardContent>
                 </CardActionArea>)
         // userData.trailSolved
 
         
     }
-    let qtdSolved = (enableCardsVerify(-1)<0)?0:enableCardsVerify(-1)
-    let totalSolved=parseInt((qtdSolved/SelectedTrail.exercisesTrail.length)*100)
-    if (totalSolved===100)
-        alert("PARABENS voce concluiu a trilha")
+    
+    const ShowTrailExercises = (props) =>{
+        let selectedTrail = props.selectedTrail
+        let sessionData= props.sessionData
+        let pagination= props.pagination
+        let dimensionPage= props.dimensionPage
+        let paginationClick= props.paginationClick
         
-    return (<>
-    <CircularProgressWithIcon value={totalSolved}/>
-    <Grid container justifyContent="center" sx={{width:400,marginTop: 2}} >
-        <Typography component="h1" variant="h5">
-            {SelectedTrail.trailName}
-        </Typography>
-    </Grid>
-    <Grid container justifyContent="flex-start" sx={{width:400,marginTop: 2}} >
-        <Typography component="h2" variant="body2">
-            {SelectedTrail.trailDescription}
-        </Typography>
-    </Grid>
-    <Grid container justifyContent="flex-end" sx={{width:400,marginTop: 2}} >
-        <Typography component="h4" variant="body2">
-            {SelectedTrail.difficultyLevel}
-        </Typography>
-    </Grid>
-   
-                          
-                                
-    <Box
-        // sm={12}
-        sx={{
-            position: 'absolute',
-            marginTop: 0,
-            left: 10,
-            right: 10,
-            display: 'flex',
-            flexDirection: 'column',
-            // alignItems: 'center',
-        }}
-        >
-        <ImageList sx={{ width: "100%",
-                height: "auto",
-            }} spacing={1} cols={Math.trunc((state.dimensionPage.width/400))} >
-            {SelectedTrail.exercisesTrail.map((exercise,index) => {if ((index>=((state.pagination-1)*pageSize)) && (index<(state.pagination*pageSize))) return(
-                // <></>
-            <Card key={`key-${(exercise.id+1)}`} sx={{
-                maxWidth: 500,
-                height: "100%"
-            }}  >
-                <EnableCards exercise={exercise} index ={index}></EnableCards>
-            </Card>
-            )
-            return (null)
-            })}
-        </ImageList>
-        <Grid
-            container
-            spacing={0}
-            marginBottom={15}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            // style={{ minHeight: '100vh' }}
-            >
-            <Grid item xs={3}>
-                <Stack spacing={2}  >
-                    <Pagination count={10} variant="outlined" color="secondary" align="center" onClick={paginationClick} />
-                </Stack>
-            </Grid>
+        // if(props.selectedExercises.lenght===0) props.setSelectedExercises([...trail.exercisesTrail])
+        // console.log(userData)
+        // console.log(props.sessionData.email)
+        
+        // console.log(selectedTrail)
+        if (!selectedTrail){
+            // window.location.href = "/notfound"
+            return <>ERRO TRILHA NAO ENCONTRADA</>
+        }
+        // props.trailRef(trail);
+
+            
+        return (<>
+        <CircularProgressWithIcon value={props.totalSolved}/>
+        <Grid container justifyContent="center" sx={{width:400,marginTop: 2}} >
+            <Typography component="h1" variant="h5">
+                {selectedTrail.trailName}
+            </Typography>
         </Grid>
-    </Box>
-</>)
-}
-
-class ExerciseTrail extends React.Component{
+        <Grid container justifyContent="flex-start" sx={{width:400,marginTop: 2}} >
+            <Typography component="h2" variant="body2">
+                {selectedTrail.trailDescription}
+            </Typography>
+        </Grid>
+        <Grid container justifyContent="flex-end" sx={{width:400,marginTop: 2}} >
+            <Typography component="h4" variant="body2">
+                {selectedTrail.difficultyLevel}
+            </Typography>
+        </Grid>
     
-    constructor(props){
-        super(props);
-        // console.log(props)
-        
-        const data= UsersController.getSession(); 
-        const initialSize=getWindowDimensions()
-        
-
-        console.log("alertControll")
-        console.log(props.alertControll)
-        this.difficultyLevels =difficultyLevels
-        this.alertControll = props.alertControll
-        
-
-        this.state={
-            session:{
-                ...data
-            },
-            selectedExercises:[],
-            dimensionPage:initialSize,
-            pagination: 1
-        }
-
-        
-        window.addEventListener('resize', this.resizePage);
-        
+                            
+                                    
+        <Box
+            // sm={12}
+            sx={{
+                position: 'absolute',
+                marginTop: 0,
+                left: 10,
+                right: 10,
+                display: 'flex',
+                flexDirection: 'column',
+                // alignItems: 'center',
+            }}
+            >
+            <ImageList sx={{ width: "100%",
+                    height: "auto",
+                }} spacing={1} cols={Math.trunc((dimensionPage.width/400))} >
+                {selectedTrail.exercisesTrail.map((exercise,index) => {if ((index>=((pagination-1)*pageSize)) && (index<(pagination*pageSize))) return(
+                    // <></>
+                <Card key={`key-${(exercise.id+1)}`} sx={{
+                    maxWidth: 500,
+                    height: "100%"
+                }}  >
+                    <EnableCards exercise={exercise} index ={index}></EnableCards>
+                </Card>
+                )
+                return (null)
+                })}
+            </ImageList>
+            <Grid
+                container
+                spacing={0}
+                marginBottom={15}
+                direction="column"
+                alignItems="center"
+                justify="center"
+                // style={{ minHeight: '100vh' }}
+                >
+                <Grid item xs={3}>
+                    <Stack spacing={2}  >
+                        <Pagination count={10} variant="outlined" color="secondary" align="center" onClick={paginationClick} />
+                    </Stack>
+                </Grid>
+            </Grid>
+        </Box>
+    </>)
     }
 
     
-    setSelectedExercises(exercises){
-        this.setState({selectedExercises :exercises }) 
-    }
-
-
-    resizePage=()=>{
-        const windowSize=getWindowDimensions()
-        this.setState({dimensionPage :windowSize }) 
-    }
-    paginationClick =(event)=>{
-        console.log(this.state.selectedExercises)
-        console.log(event.target.innerText)
-        if (event.target.getAttribute("data-testid")==="NavigateNextIcon"){
-            this.setState({pagination : (this.setState.pagination +1)})
-            // return
-        }
-        console.log(this.state.selectedExercises)
-        if (event.target.getAttribute("data-testid")==="NavigateBeforeIcon"){
-            this.setState({pagination : (this.setState.pagination -1)})
-            // return
-        }
-        console.log(this.state.selectedExercises)
-        if (Math.trunc(event.target.innerText)){
-            this.setState({pagination : Math.trunc(event.target.innerText)})
-            // return
-        }
-        console.log(this.state.selectedExercises)
-        
-    }
-   
+    return (
+        <ThemeProvider theme={theme}>
+            <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            {totalSolved===100?<SucessAlertDialogSlide enable={true} title={"Parabens!!!"} message={selectedTrail.congratulationsMessage}/>:<></>}
+            <ShowTrailExercises  totalSolved={totalSolved} selectedTrail={selectedTrail} sessionData={sessionData} pagination={pagination}   dimensionPage={dimensionPage} paginationClick={paginationClick} resizePage={resizePage} ></ShowTrailExercises>
+            </Container>
+        </ThemeProvider>      
+    );
     
-    render() {
-
-        // const { studentId } = useParams();
-
-        return (
-            <ThemeProvider theme={theme}>
-                <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                
-                <ShowTrailExercises  state={this.state} paginationClick={this.paginationClick} resizePage={this.resizePage} setSelectedExercises={this.setSelectedExercises}></ShowTrailExercises>
-                </Container>
-            </ThemeProvider>      
-        );
-    }
 }
 
 export default ExerciseTrail;
