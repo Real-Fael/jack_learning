@@ -12,12 +12,14 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { Icon } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import UsersController from '../../controller/userController';
 import { stringAvatar } from '../../controller/utilsController';
 
+
 const pagesRedirect = {'Home':'/', 'Trilhas':'/Exercisetrail', 'Documentação':'/documentation'};
-const teacherPagesRedirect = {'Home':'/', 'Trilhas':'/ExerciseTrail', 'Documentação':'/documentation','Criar Trilha':'/newExerciseTrail','Criar exercicio':'/newExercise'};
+const teacherPagesRedirect = {'Home':'/', 'Trilhas':'/ExerciseTrail', 'Documentação':'/documentation','Criar exercicio':'/newExercise'};
 const settingsRedirect = {'Profile':'/Profile', 'Account':'/Account', 'Logout':'/Logout'};
 const nonLogedRedirect = {'Acessar':'/login','Cadastrar':'/register'}
 const pages = Object.keys(pagesRedirect)//['Products', 'Pricing', 'Blog'];
@@ -178,7 +180,8 @@ class Navbar extends React.Component{
           <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          {/* <img alt='head Jack' src={require("./..\\..\\data\\jackHead.png")} height={30} width={50}/> */}
+          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
@@ -194,7 +197,8 @@ class Navbar extends React.Component{
               textDecoration: 'none',
             }}
           >
-            JackLearning
+            <img alt='head Jack' src={require("./..\\..\\data\\jackHeadRight.png")} height={30} width={50}/>
+             Jack Learning
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -233,7 +237,7 @@ class Navbar extends React.Component{
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
             variant="h5"
             noWrap
@@ -250,6 +254,7 @@ class Navbar extends React.Component{
               textDecoration: 'none',
             }}
           >
+            <img alt='head Jack' src={require("./..\\..\\data\\jackHeadRight.png")} height={30} width={50}/>
             Jack  Learning
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

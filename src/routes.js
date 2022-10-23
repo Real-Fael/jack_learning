@@ -18,6 +18,7 @@ import ListExerciseTrail from './views/pages/listExerciseTrail';
 import ExerciseTrail from './views/pages/exerciseTrail';
 import _ from 'lodash';
 import NotFound from './views/pages/notFound';
+import ListExercises from './views/pages/listExercises';
 
 class MyRoutes extends React.Component{
 
@@ -65,10 +66,11 @@ class MyRoutes extends React.Component{
                 <Route exact path='/' element={<Home/>} />
                 <Route  path='/register' element={<Register alertControll={this.alertControll}/>} />
                 <Route  path='/login' element={<Login alertControll={this.alertControll}/>}  />
-                {/* <Route  path='/Exercise' element={<Exercise/>} /> */}
+                <Route  path='/Exercise' element={<ListExercises/>} />
                 <Route  path='/Exercise/:param' element={<Exercise/>} />
                 <Route  path='/NewExercise' element={<NewExercise/>} />
                 <Route  path='/NewExerciseTrail' element={<NewExerciseTrail alertControll={this.alertControll}/>} />
+                <Route  path='/NewExerciseTrail/:param' element={<NewExerciseTrail alertControll={this.alertControll}/>} />
                 <Route  path='/ExerciseTrail' element={<ListExerciseTrail alertControll={this.alertControll} />} />
                 <Route  path='/ExerciseTrail/:param' element={<ExerciseTrail alertControll={this.alertControll}/>}  />
                 <Route  path='/*' element={<NotFound />}  />

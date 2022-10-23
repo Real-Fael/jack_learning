@@ -18,6 +18,8 @@ import { Label } from "recharts";
 import { ErrorAlert, SuccessAlert } from "../../../components/alerts";
 import TrailController from "../../../controller/trailController";
 import { ComboBox } from "../../../components/comboBox";
+import { useParams } from "react-router";
+import _ from "lodash"
 
 const theme = createTheme();
 // a little function to help us with reordering the result
@@ -52,212 +54,271 @@ export const reorder =(
 //     }
 //   });
 
+function not(a, b) {
+    console.log(b)
+    return a.filter((value) => {
+        let check = true
+         b.forEach((valueB)=>{
+            
+            if (_.isEqual(value, valueB)) check= false
+         })
+       return check
+    });
+}
 
 
-
-class NewExerciseTrail extends React.Component{
+function NewExerciseTrail(props){
     
-    constructor(props){
-        super(props);
-        // console.log(props)
-        let exerciseList= ExerciseController.getExerciseList()
-        // console.log("exerciseList")
-        // console.log(exerciseList)
-        const data= UsersController.getSession(); 
-        this.state={
-            session:{
-                ...data
-            },
-            disponibleItems: exerciseList,//getItems(10),
-            choosedItems:[]//getItems(1)
+    const {param} = useParams()
+    const regex = new RegExp('^([0-9]*-(edit)?(copy)?)?$');
+    let params =param? param.split("-"):null
+    if (param!=null &&(!regex.test(param) || params.length>2)){
+        window.location.href = "/exerciseTrail"
+    }
+    let trailId = params?params[0]:null
+    let mode = params? params[1]:null
+    console.log(trailId)
+    console.log("exercise")
+    let editTrailAux =null
+    let session = UsersController.getSession()
+    if (trailId){
+        editTrailAux = TrailController.getTrail(parseInt(trailId))
+    }
+    console.log(editTrailAux)
 
-        }
-        this.refForm= React.createRef();
-        this.alertControll = props.alertControll;
-        // const classes = useStyles();
-        // console.log(data)
-        
+    const [sessionData, setSessionData] = React.useState(session);
+    const [editTrail, setEditTrail] = React.useState(editTrailAux);
+
+    const [choosedItems, setChoosedItems] = React.useState(mode==="copy"||(editTrailAux && editTrailAux.creatorTrail.id===session.id)?editTrailAux.exercisesTrail:[]);
+    const [disponibleItems, setDisponibleItems] = React.useState(not(ExerciseController.getExerciseList(),choosedItems));
+    //const [choosedItems, setChoosedItems]=React.useState()
+    if (sessionData.id ===-1){
+        window.location.href = "/login"
+        return <></>
     }
-    setItems = (newItems) => {
-        
-        this.setState({choosedItems:newItems})
+    if (!sessionData.isteacher){
+        window.location.href = "/exercisetrail"
+        return <></>
     }
-    onDragEnd = (onDragEndProps) => {
+    if((editTrail && editTrail.hasOwnProperty("creatorTrail") && editTrail.creatorTrail.id!==session.id) && mode!=="copy"){
+        window.location.href = "/exercisetrail"
+        return <></>
+    }
+    
+
+    
+    let refForm= React.createRef();
+    let alertControll = props.alertControll;
+    // const classes = useStyles();
+    // console.log(data)
+        
+    
+    
+    const onDragEnd = (onDragEndProps) => {
         // dropped outside the list
         // console.log(onDragEndProps)
         if (!onDragEndProps.destination) return;
     
-        const newItems = reorder(this.state.choosedItems, onDragEndProps.source.index, onDragEndProps.destination.index);
+        const newItems = reorder(choosedItems, onDragEndProps.source.index, onDragEndProps.destination.index);
     
-        this.setItems(newItems);
+        setChoosedItems(newItems)
       };
     
-    handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
         
     
         let trailData = {
-            trailName: this.refForm.current.trailName.value,
-            difficultyLevel: this.refForm.current.comboBoxLevels.value,
-            exercisesTrail: this.state.choosedItems,
-            creatorTrail: this.state.session,
-            trailDescription:this.refForm.current.description.value,
-            congratulationsMessage:this.refForm.current.congratulationsMessage.value
+            id: (trailId)?trailId:null,
+            trailName: refForm.current.trailName.value,
+            difficultyLevel: refForm.current.comboBoxLevels.value,
+            exercisesTrail: choosedItems,
+            creatorTrail: sessionData,
+            trailDescription:refForm.current.description.value,
+            congratulationsMessage:refForm.current.congratulationsMessage.value
             
         }
+        
+        
+        // if(mode ==="copy"){
+        //     alert("copy")
+        //     return
+        // }
+        // if(mode ==="edit"){
+        //     alert("edit")
+        //     return
+        // }
 
+        alert("nova")
         console.log(trailData);
         try{
-            TrailController.registerCheck(trailData)
+            TrailController.registerCheck(trailData, mode)
 
-            this.alertControll.changeAlert(<SuccessAlert closeAlert= {this.alertControll.closeAlert} message="Trilha criada com sucesso" ></SuccessAlert>)
+            alertControll.changeAlert(<SuccessAlert closeAlert= {alertControll.closeAlert} message="Trilha criada com sucesso" ></SuccessAlert>)
 
         }catch(e){
             // console.log(e)
-            this.alertControll.changeAlert(<ErrorAlert closeAlert= {this.alertControll.closeAlert} message= {e}></ErrorAlert>)
+            alertControll.changeAlert(<ErrorAlert closeAlert= {alertControll.closeAlert} message= {e}></ErrorAlert>)
             return
         }
 
         window.location.href = "/exercisetrail"
-        
+        return
+
+
 
       };
 
+    const typing =(e)=>{
+        // console.log(e.target.value)
+        // console.log(e.target.id)
+        let editTrailAux = {...editTrail}
+        if (e.target.id ==="trailName")
+            editTrailAux.trailName =e.target.value
+        if (e.target.id ==="description")
+            editTrailAux.trailDescription =e.target.value
+        if (e.target.id ==="congratulationsMessage")
+            editTrailAux.congratulationsMessage =e.target.value
+        
+        setEditTrail(editTrailAux)
+        
 
-    render() {
 
-        if (this.state.session.id ===-1){
-            window.location.href = "/login"
-            return <></>
-        }
-        if (!this.state.session.isteacher){
-            window.location.href = "/exercisetrail"
-            return <></>
-        }
 
-        return (
-            <ThemeProvider theme={theme}>
-                <Container component="main" maxWidth="xs">
-                    <CssBaseline />
-                    <Box
-                    sm={12}
-                    sx={{
-                        marginTop: 8,
-                        marginLeft: "-40%",
-                        marginRight: "-40%",
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                    >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <ListAltIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            Nova Trilha de Aprendizagem
-                        </Typography>
-                        <Box component="form" ref={this.refForm}  onSubmit={this.handleSubmit} sx={{ mt: 3 }}>
-                            <Grid container spacing={2}>
-                            
-                            
-                            <Grid item xs={12} >
-                                <TextField
-                                required
-                                fullWidth
-                                name="trailName"
-                                label="Nome da trilha"
-                                id="trailName"
-                                autoComplete="given-name"
-                                />
-                            </Grid>
-                            <Grid item xs={12} >
-                                <TextField
-                                multiline
-                                maxRows={5}
-                                required
-                                fullWidth
-                                name="description"
-                                label="Descrição"
-                                id="description"
-                                // autoComplete="given-name"
-                                />
-                            </Grid>
-                            <Grid item xs={12} >
-                                <TextField
-                                multiline
-                                maxRows={5}
-                                required
-                                fullWidth
-                                name="congratulationsMessage"
-                                label="Mensagem de parabenização"
-                                id="congratulationsMessage"
-                                // autoComplete="given-name"
-                                />
-                            </Grid>
-                            
-
-                            <Grid item xs={12}>
-                                <ComboBox trailFeatures={trailFeatures.levels}></ComboBox>
-                            </Grid>
-                            
-                            <Grid item xs={12}>
-                             <TransferList items={this.state.disponibleItems} choosedItems={this.state.choosedItems} setChoosedItems={this.setItems} onDragEnd={this.onDragEnd}></TransferList>
-                            </Grid>
-                            
-                            {/* <Grid item xs={12} sm={6}>
-                                <TextField
-                                autoComplete="given-name"
-                                name="firstName"
-                                required
-                                fullWidth
-                                id="firstName"
-                                label="Nome"
-                                autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                            <DraggableList items={this.state.choosedItems} onDragEnd={this.onDragEnd} />
-                            </Grid> */}
-                            
-                            </Grid>
-                            <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                            >
-                            Criar Nova Trilha
-                            </Button>
-                            
-                        </Box>
-                    </Box>
-
-                    
-                    
-                    {/* <pre>
-                            {JSON.stringify(
-                                this.state.choosedItems.map(item => item, 'id', 'primary'),
-                                null,
-                                2
-                            )}
-                    </pre> */}
-                        {/* <Paper>
-                            <DraggableList items={this.state.choosedItems} onDragEnd={this.onDragEnd} />
-                        </Paper> */}
-                        {/* <Paper >
-                            <pre>
-                            {JSON.stringify(
-                                this.state.choosedItems.map(item => item, 'id', 'primary'),
-                                null,
-                                2
-                            )}
-                            </pre>
-                        </Paper> */}
-                    
-            </Container>
-            </ThemeProvider>      
-        );
     }
+    
+
+    
+
+    return (
+        <ThemeProvider theme={theme}>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                sm={12}
+                sx={{
+                    marginTop: 8,
+                    marginLeft: "-40%",
+                    marginRight: "-40%",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <ListAltIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Nova Trilha de Aprendizagem
+                    </Typography>
+                    <Box component="form" ref={refForm}  onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                        
+                        
+                        <Grid item xs={12} >
+                            <TextField
+                            required
+                            fullWidth
+                            name="trailName"
+                            label="Nome da trilha"
+                            id="trailName"
+                            // autoComplete="given-name"
+                            value={(editTrail)?editTrail.trailName: ""}
+                            onChange={typing}
+                            />
+                        </Grid>
+                        <Grid item xs={12} >
+                            <TextField
+                            multiline
+                            maxRows={5}
+                            required
+                            fullWidth
+                            name="description"
+                            label="Descrição"
+                            id="description"
+                            value={(editTrail)?editTrail.trailDescription: ""}
+                            onChange={typing}
+                            // autoComplete="given-name"
+                            />
+                        </Grid>
+                        <Grid item xs={12} >
+                            <TextField
+                            multiline
+                            maxRows={5}
+                            required
+                            fullWidth
+                            name="congratulationsMessage"
+                            label="Mensagem de parabenização"
+                            id="congratulationsMessage"
+                            value={(editTrail)?editTrail.congratulationsMessage: ""}
+                            onChange={typing}
+                            // autoComplete="given-name"
+                            />
+                        </Grid>
+                        
+
+                        <Grid item xs={12}>
+                            <ComboBox trailFeatures={trailFeatures.levels}  defaultValue={(editTrail && editTrail.hasOwnProperty("difficultyLevel"))?trailFeatures.levels.map(e => e.label).indexOf(editTrail.difficultyLevel):0} ></ComboBox>
+                        </Grid>
+                        
+                        <Grid item xs={12}>
+                            <TransferList items={disponibleItems} choosedItems={choosedItems} setChoosedItems={setChoosedItems} onDragEnd={onDragEnd}></TransferList>
+                        </Grid>
+                        
+                        {/* <Grid item xs={12} sm={6}>
+                            <TextField
+                            autoComplete="given-name"
+                            name="firstName"
+                            required
+                            fullWidth
+                            id="firstName"
+                            label="Nome"
+                            autoFocus
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                        <DraggableList items={state.choosedItems} onDragEnd={onDragEnd} />
+                        </Grid> */}
+                        
+                        </Grid>
+                        <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                        >
+                         {(mode==="edit")?"Editar Trilha":(mode==="copy"?"Criar uma Cópia":"Criar Nova Trilha")}
+                        </Button>
+                        
+                    </Box>
+                </Box>
+
+                
+                
+                {/* <pre>
+                        {JSON.stringify(
+                            state.choosedItems.map(item => item, 'id', 'primary'),
+                            null,
+                            2
+                        )}
+                </pre> */}
+                    {/* <Paper>
+                        <DraggableList items={state.choosedItems} onDragEnd={onDragEnd} />
+                    </Paper> */}
+                    {/* <Paper >
+                        <pre>
+                        {JSON.stringify(
+                            state.choosedItems.map(item => item, 'id', 'primary'),
+                            null,
+                            2
+                        )}
+                        </pre>
+                    </Paper> */}
+                
+        </Container>
+        </ThemeProvider>      
+    );
 }
+
 
 export default NewExerciseTrail;

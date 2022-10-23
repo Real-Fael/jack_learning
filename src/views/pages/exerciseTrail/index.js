@@ -34,7 +34,7 @@ function ExerciseTrail(props){
     console.log("exercise")
     const [sessionData, setSessionData] = React.useState(UsersController.getSession());
     
-    const [selectedTrail,setSelectedTrail]=React.useState(TrailController.getTrail(param))
+    const [selectedTrail,setSelectedTrail]=React.useState(TrailController.getTrail(parseInt(param)))
 
     
     const [dimensionPage,setDimensionPage]=React.useState(getWindowDimensions())
@@ -326,7 +326,7 @@ function ExerciseTrail(props){
                 >
                 <Grid item xs={3}>
                     <Stack spacing={2}  >
-                        <Pagination count={10} variant="outlined" color="secondary" align="center" onClick={paginationClick} />
+                        <Pagination count={Math.ceil(selectedTrail.exercisesTrail.length/pageSize)} variant="outlined" color="secondary" align="center" onClick={paginationClick} />
                     </Stack>
                 </Grid>
             </Grid>

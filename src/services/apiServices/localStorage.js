@@ -33,7 +33,7 @@ class LocalStorage{
         
         let exercises = this.getExerciseList();
         exercises.push({
-            ...exerciseData, id:exercises.length
+            ...exerciseData, id: (exercises[exercises.length-1].id+1)
         })
         window.localStorage.setItem("exercises",JSON.stringify(exercises));
     }
@@ -102,7 +102,7 @@ class LocalStorage{
         
         let logins = this.getLoginsList();
         logins.push({
-            ...userData
+            ...userData, id:(logins.length!==0?(logins[logins.length-1].id+1):0) 
         })
         window.localStorage.setItem("logins",JSON.stringify(logins));
     }
@@ -135,7 +135,19 @@ class LocalStorage{
         }
         return exists;
     }
-
+    static getPositionTrailData(trailId){
+        let exists= null;
+        let trail = this.getTrailList();
+        for(let i=0;i<trail.length;i++){
+            // console.log(trail[i].id , trailId )
+            if(trail[i].id===parseInt(trailId)) {
+                exists=i;
+                break;
+            }
+        }
+        return exists;
+    }
+    
     static getTrailList(){
         let trail = [];
         if (window.localStorage.hasOwnProperty("trail"))
@@ -153,8 +165,38 @@ class LocalStorage{
         
         let trail = this.getTrailList();
         trail.push({
-            ...trailData, id:trail.length
+            ...trailData, id :(trail.length!==0?(trail[trail.length-1].id+1):0) 
         })
+        window.localStorage.setItem("trail",JSON.stringify(trail));
+    }
+    static StoreOrEditTrailData(trailData){
+        
+        //caso retorne um objeto ja existe esse usuario
+        // eslint-disable-next-line
+        // if (this.getUserLoginInformation(trailData.email)) throw "trilha ja cadastrada"
+        let trailDataAux={...trailData}
+        let trail = this.getTrailList();
+        let nextId= (trail.length!==0?(trail[trail.length-1].id+1):0) 
+        trailDataAux.id = (trailDataAux.id!==null)?parseInt(trailDataAux.id):nextId
+        if (trailDataAux.id===trail[trail.length-1].id +1){
+            trail.push(trailDataAux)
+        }else{
+            trail[trailDataAux.id] = trailDataAux
+            
+        }
+
+        window.localStorage.setItem("trail",JSON.stringify(trail));
+    }
+    static removeTrailData(trailId){
+        
+        //caso retorne um objeto ja existe esse usuario
+        // eslint-disable-next-line
+        // if (this.getUserLoginInformation(trailData.email)) throw "trilha ja cadastrada"
+        
+        let trail = this.getTrailList();
+        let position = this.getPositionTrailData(trailId)
+        trail.splice(position,1)
+
         window.localStorage.setItem("trail",JSON.stringify(trail));
     }
 

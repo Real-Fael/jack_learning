@@ -56,6 +56,7 @@ class NewExercise extends React.Component{
         let IOData = {
             title:this.refForm.current.title.value,
             description:this.refForm.current.description.value,
+            creatorExercise:this.state.session
         }
         // console.log(IOData.title)
         // console.log(IOData.description)
@@ -67,8 +68,8 @@ class NewExercise extends React.Component{
             return
         }
 
-        if (IOLen === 0){
-            alert("deve conter ao menos uma entrada e saida")
+        if (IOLen <= 5){
+            alert("deve conter ao menos 5 instâncias de entrada e saida")
             return
         }
 

@@ -15,6 +15,26 @@ class TrailService{
         }
     }
 
+    static editTrail(TrailData){
+        
+        try{
+            LocalStorage.StoreOrEditTrailData(TrailData);
+
+        }catch(e){
+            throw e;
+        }
+    }
+
+    static removeTrail(TrailData){
+        
+        try{
+            LocalStorage.removeTrailData(TrailData);
+
+        }catch(e){
+            throw e;
+        }
+    }
+
     
     static getTrail(TrailId){
         

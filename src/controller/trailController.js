@@ -3,7 +3,7 @@ import TrailService from "../services/trailService";
 
 class TrailController {
  
-    static registerCheck(trailData){
+    static registerCheck(trailData,mode){
 
         if (!trailData.trailName || !trailData.difficultyLevel || !trailData.trailDescription|| !trailData.congratulationsMessage || !(trailData.exercisesTrail.length!==0)) 
             // eslint-disable-next-line
@@ -12,6 +12,10 @@ class TrailController {
             // eslint-disable-next-line
             throw "Somente Professores podem cadastrar trilhas";
         try{
+            if (mode==="edit"){
+                TrailService.editTrail(trailData)
+                return
+            }
             TrailService.registerTrail(trailData)
 
         }catch(e){
@@ -37,6 +41,17 @@ class TrailController {
 
         try{
             return TrailService.getTrail(trailId)
+
+        }catch(e){
+            throw e;
+        }
+
+       
+    }
+    static removeTrail(trailId){
+
+        try{
+            return TrailService.removeTrail(trailId)
 
         }catch(e){
             throw e;
