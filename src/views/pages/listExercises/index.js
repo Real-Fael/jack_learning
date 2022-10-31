@@ -7,7 +7,6 @@ import React from "react";
 import UsersController from "../../../controller/userController";
 import { DropResult } from 'react-beautiful-dnd';
 import { Avatar, Box, Button, Card, CardActionArea, CardContent, CardMedia, Container, createTheme, CssBaseline, Grid, IconButton, ImageList, Pagination, Stack, ThemeProvider, Typography } from "@mui/material";
-import TrailController from "../../../controller/trailController";
 import { stringAvatar } from "../../../controller/utilsController";
 import {getWindowDimensions} from "../../../services/windowDimensions";
 import trailFeatures from "../../../data/trailFeatures.json"
@@ -18,25 +17,11 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import _ from "lodash"
+import ExerciseController from "../../../controller/ExerciseController";
 
 const theme = createTheme();
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//       "& > *": {
-//         margin: theme.spacing(1),
-//         width: "25ch"
-//       }
-//     },
-//     gridList: {
-//       width: "100%",
-//       height: "auto"
-//     },
-//     card: {
-//       maxWidth: 350,
-//       height: "100%"
-//     }
-//   }));
+
 
 const pageSize=10
 let difficultyLevels  = [...trailFeatures.levels]
@@ -59,7 +44,7 @@ class ListExercise extends React.Component{
     constructor(props){
         super(props);
         // console.log(props)
-        this.listTrails = TrailController.getTrailList()
+        this.listExercise = ExerciseController.getExerciseList()
         const data= UsersController.getSession(); 
         const initialSize=getWindowDimensions()
         
@@ -74,7 +59,7 @@ class ListExercise extends React.Component{
             session:{
                 ...data
             },
-            selectedTrails:this.listTrails,
+            selectedExercises:this.listExercise,
             dimensionPage:initialSize,
             pagination: 1,
             selectedLevel:null
@@ -88,11 +73,11 @@ class ListExercise extends React.Component{
     filterByLevel=(level)=>{
         if(!level) return
         if (level === "Todos os Níveis"){
-            this.setState({selectedTrails:this.listTrails})
+            this.setState({selectedExercises:this.listExercise})
             return
         }
         
-        let filtred = this.listTrails.filter((element)=>{
+        let filtred = this.listExercise.filter((element)=>{
             console.log(element.difficultyLevel)
             console.log(`${element.difficultyLevel} === ${level}`)
             console.log(element.difficultyLevel === level)
@@ -105,7 +90,7 @@ class ListExercise extends React.Component{
             this.alertControll.changeAlert(<ErrorAlert closeAlert= {this.alertControll.closeAlert} message= "Não foi encontrado trilhas com este nível de dificuldade" ></ErrorAlert>)    
         //window.alert("Não foi encontrado trilhas com este nível de dificuldade")
         
-        this.setState({selectedTrails:filtred})
+        this.setState({selectedExercises:filtred})
         
 
     }
@@ -120,23 +105,23 @@ class ListExercise extends React.Component{
         this.setState({dimensionPage :windowSize }) 
     }
     paginationClick =(event)=>{
-        console.log(this.state.selectedTrails)
+        console.log(this.state.selectedExercises)
         console.log(event.target.innerText)
         if (event.target.getAttribute("data-testid")==="NavigateNextIcon"){
             this.setState({pagination : (this.setState.pagination +1)})
             // return
         }
-        console.log(this.state.selectedTrails)
+        console.log(this.state.selectedExercises)
         if (event.target.getAttribute("data-testid")==="NavigateBeforeIcon"){
             this.setState({pagination : (this.setState.pagination -1)})
             // return
         }
-        console.log(this.state.selectedTrails)
+        console.log(this.state.selectedExercises)
         if (Math.trunc(event.target.innerText)){
             this.setState({pagination : Math.trunc(event.target.innerText)})
             // return
         }
-        console.log(this.state.selectedTrails)
+        console.log(this.state.selectedExercises)
         
     }
     deleteTrail=(e)=>{
@@ -148,15 +133,15 @@ class ListExercise extends React.Component{
         let delId = parseInt( e.currentTarget.id.split("-")[1])
         if (delString!=="delete")
             return
-        let trailToBeDeleted = TrailController.getTrail(delId)
+        let trailToBeDeleted = ExerciseController.getTrail(delId)
 
-        if (trailToBeDeleted.creatorTrail.id!== this.state.session.id)
+        if (trailToBeDeleted.creatorExercise.id!== this.state.session.id)
             return
-        TrailController.removeTrail(delId)
+            ExerciseController.removeTrail(delId)
         // console.log(trailToBeDeleted)
-        // console.log(this.state.selectedTrails)
-        // console.log(not(this.state.selectedTrails,[trailToBeDeleted]))
-        this.setState({selectedTrails:not(this.state.selectedTrails,[trailToBeDeleted])})
+        // console.log(this.state.selectedExercises)
+        // console.log(not(this.state.selectedExercises,[trailToBeDeleted]))
+        this.setState({selectedExercises:not(this.state.selectedExercises,[trailToBeDeleted])})
 
         // if (trailToBeDeleted)
 
@@ -165,30 +150,30 @@ class ListExercise extends React.Component{
 
         if (this.state.session.isteacher){
 
-            if (this.state.session.id === trail.creatorTrail.id){
+            if (this.state.session.id === trail.creatorExercise.id){
                 return (
                 <Stack spacing={2} direction="row"  justifyContent="flex-end" >
-                    <IconButton aria-label="visualize" color="inherit" href={`/exercisetrail/${trail.id}`}>
+                    <IconButton aria-label="visualize" color="inherit" href={`/exercise/${trail.id}`}>
                         <VisibilityIcon  />
                     </IconButton>
-                    <IconButton aria-label="edit" color="secondary" href={`/newExerciseTrail/${trail.id}-edit`}>
+                    <IconButton aria-label="edit" color="secondary" href={`/newExercise/${trail.id}-edit`}>
                         <EditIcon  />
                     </IconButton>
-                    <IconButton aria-label="copy" color="info" href={`/newExerciseTrail/${trail.id}-copy`}>
+                    <IconButton aria-label="copy" color="info" href={`/newExercise/${trail.id}-copy`}>
                         <FileCopyIcon  />
                     </IconButton>
                     
-                    <IconButton aria-label="delete" color="error" id={`delete-${trail.id}`} onClick={this.deleteTrail} >
+                    {/* <IconButton aria-label="delete" color="error" id={`delete-${trail.id}`} onClick={this.deleteTrail} >
                         <DeleteIcon  />
-                    </IconButton>
+                    </IconButton> */}
                 </Stack>)
             }else{
                 return (
                     <Stack spacing={2} direction="row"  justifyContent="flex-end">
-                        <IconButton aria-label="visualize" color="inherit" href={`/exercisetrail/${trail.id}`}>
+                        <IconButton aria-label="visualize" color="inherit" href={`/exercise/${trail.id}`}>
                             <VisibilityIcon  />
                         </IconButton>
-                        <IconButton aria-label="copy" color="info" href={`/newExerciseTrail/${trail.id}-copy`}>
+                        <IconButton aria-label="copy" color="info" href={`/newExercise/${trail.id}-copy`}>
                             <FileCopyIcon  />
                         </IconButton>
 
@@ -199,7 +184,7 @@ class ListExercise extends React.Component{
             
     }
     
-    MyCardContent(trail){
+    MyCardContent(exercise){
         return(
             <>
                 <Grid
@@ -211,28 +196,26 @@ class ListExercise extends React.Component{
                     // style={{ minHeight: '100vh' }}
                     >
                     <Grid item xs={3}>
-                        <Avatar {...stringAvatar(trail.creatorTrail.firstName +' '+ trail.creatorTrail.lastName)} src="/static/images/avatar/5.jpg" />
+                        <Avatar {...stringAvatar(exercise.creatorExercise.firstName +' '+ exercise.creatorExercise.lastName)} src="/static/images/avatar/5.jpg" />
                     </Grid>
                 </Grid>
                 
                 <CardContent>
                 <Typography gutterBottom variant="title" component="h2" align="center"  >
-                    {trail.trailName}
+                    {exercise.title}
                 </Typography>
                 <Typography gutterBottom variant="body2" component="h3" noWrap>
-                    {`Nível: ${trail.difficultyLevel}`}
+                    {/* {`Nível: ${exercise.difficultyLevel}`} */}
                 </Typography>
                 <Typography gutterBottom variant="body2" component="h3" noWrap>
-                    {`Criador: ${trail.creatorTrail.firstName} ${trail.creatorTrail.lastName}`}
+                    {`Criador: ${exercise.creatorExercise.firstName} ${exercise.creatorExercise.lastName}`}
                 </Typography>
                 <Typography gutterBottom variant="body2" component="h3" >
-                    {trail.trailDescription}
+                    {exercise.description}
                 </Typography>
-                <Typography gutterBottom variant="body2" component="h4" align="right" >
-                    {`${trail.exercisesTrail.length} exercícios`}
-                </Typography>
+
                 </CardContent>
-                {this.BottonsModifyTrail(trail)}
+                {this.BottonsModifyTrail(exercise)}
             </>
         )
     }
@@ -245,17 +228,23 @@ class ListExercise extends React.Component{
             window.location.href = "/login"
             return <></>
         }
+        if (!this.state.session.isteacher){
+            window.location.href = "/exercisetrail"
+            return <></>
+        }
         return (
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xs">
                 <CssBaseline />
-                 
-                <Grid container justifyContent="flex-end" sx={{width:400,marginTop: 2}} >
+                <Typography gutterBottom variant="title" component="h1" align="center" sx={{width:400,marginTop: 2}} >
+                    Exercícios Disponíveis
+                </Typography>
+                {/* <Grid container justifyContent="flex-end" sx={{width:400,marginTop: 2}} >
                     <ComboBox trailFeatures={this.difficultyLevels} onSelect={this.selectLevel} defaultValue={this.difficultyLevels.length-1} ></ComboBox>
-                </Grid>
+                </Grid> */}
                 {this.state.session.isteacher?<>
                     <Stack spacing={2} direction="row"  justifyContent="flex-end" sx={{width:400,marginTop: 1}}>
-                        <Button variant="outlined" href="/newExerciseTrail">Criar Nova Trilha</Button>
+                        <Button variant="outlined" href="/newExercise">Criar Novo Exercício</Button>
                     </Stack>
                  </>:null}
                 <Box
@@ -273,7 +262,7 @@ class ListExercise extends React.Component{
                 <ImageList sx={{ width: "100%",
                         height: "auto",
                     }} spacing={1} cols={Math.trunc((this.state.dimensionPage.width/400))} >
-                    {this.state.selectedTrails.map((trail,index) => {if ((index>=((this.state.pagination-1)*pageSize)) && (index<(this.state.pagination*pageSize))) return(
+                    {this.state.selectedExercises.map((trail,index) => {if ((index>=((this.state.pagination-1)*pageSize)) && (index<(this.state.pagination*pageSize))) return(
                         // <></>
                     <Card key={`key-${(trail.id+1)}`} sx={{
                         maxWidth: 500,
@@ -281,7 +270,7 @@ class ListExercise extends React.Component{
                       }}>
                         {
                             this.state.session.isteacher?
-                        <CardContent  href={this.state.session.isteacher?null:`/exercisetrail/${trail.id}`}  sx={{ width: "100%",
+                        <CardContent  href={this.state.session.isteacher?null:`/exercise/${trail.id}`}  sx={{ width: "100%",
                         height: "100%"}} key={`${(trail.id+1)}`}>
                             {/* <CardMedia
                                 component="img"
@@ -327,7 +316,7 @@ class ListExercise extends React.Component{
                     >
                     <Grid item xs={3}>
                         <Stack spacing={2}  >
-                            <Pagination count={Math.ceil(this.state.selectedTrails.length/pageSize)} variant="outlined" color="secondary" align="center" onClick={this.paginationClick} />
+                            <Pagination count={Math.ceil(this.state.selectedExercises.length/pageSize)} variant="outlined" color="secondary" align="center" onClick={this.paginationClick} />
                         </Stack>
                      </Grid>
                 </Grid>

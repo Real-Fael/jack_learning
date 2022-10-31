@@ -5,11 +5,13 @@ import React, { memo } from "react";
 import "./index.css"
 import test from "../../../data/blocklyPalette.json"
 import BlocklyExecControll from "../../../components/blocklyExecControll";
-import { createTheme, ThemeProvider,Container,CssBaseline, Typography, Box, TextField } from '@mui/material';
+import { createTheme, ThemeProvider,Container,CssBaseline, Typography, Box, TextField, Divider } from '@mui/material';
 import UsersController from "../../../controller/userController";
 import { useParams } from "react-router-dom";
 import ExerciseController from "../../../controller/ExerciseController";
 import SucessAlertDialogSlide from "../../../components/userDialogue";
+import TrailController from "../../../controller/trailController";
+import { Paragliding } from "@mui/icons-material";
 
 
 
@@ -19,7 +21,7 @@ const theme = createTheme();
 const Infotemplate = (props) =>{
     const {param} = useParams()
     console.log(param)
-    const regex = new RegExp('^[0-9]*-[0-9]*-[0-9]*$');
+    const regex = new RegExp('(^[0-9]*-[0-9]*-[0-9]*$)');
     let params = param.split("-")
     if (!regex.test(param) || params.length>4){
         window.location.href = "/exerciseTrail"
@@ -29,8 +31,10 @@ const Infotemplate = (props) =>{
     let exerciseId=params[params.length-1]
     console.log("exercise")
     let exercise = ExerciseController.getExercise(exerciseId)
-    
-    console.log(exercise)
+    let trail = TrailController.getTrail(parseInt(trailId))
+
+    console.log("trail")
+    console.log(trail)
     if (!exercise){
         window.location.href = "/exerciseTrail"
         return <>ERRO EXERCICIO NAO ENCONTRADO</>
@@ -38,11 +42,17 @@ const Infotemplate = (props) =>{
     // props.exerciseRef(exercise);
 
     return <Box sx={{ width: '100%', maxWidth: 500 }}  ref={props.exerciseRef} >
+        <Typography sx={{ "textAlign": 'center', "fontWeight": "bold"}} variant="h4" gutterBottom component="div" id="title" >
+            {trail.trailName}
+        </Typography>
         <Typography sx={{ "textAlign": 'center', "fontWeight": "bold"}} variant="h5" gutterBottom component="div" id="title" >
             {exercise.title}
         </Typography>
-        <Typography sx={{ "textAlign": 'center'}} variant="caption" display="block" gutterBottom id="id_exercise">
-        n°:{trailId}-{maxLenghtTrail}-{exercise.id}
+        <Typography sx={{ "textAlign": 'center'}} variant="caption" display="block" visibility="hidden" position="absolute" gutterBottom id="id_exercise">
+            n°:{trailId}-{maxLenghtTrail}-{exercise.id}
+        </Typography>
+        <Typography sx={{ "textAlign": 'center'}} variant="caption" display="block"  gutterBottom id="id_exercise">
+            Posição na trilha:{parseInt(maxLenghtTrail)+1} de {trail.exercisesTrail.length}
         </Typography>
 
 
@@ -69,32 +79,55 @@ const Infotemplate = (props) =>{
         autoComplete="off"
         >
             {exercise.IOlist.map((element,pos,list) => {
-                return <div key={`io-${pos}`} id={`io-${pos}`}>
-                        
-                        <TextField
-                        id={`input-${pos}`}
-                        label={`Entrada-${pos+1}`}
-                        multiline
-                        rows={5}
-                        defaultValue={element.input}
-                        variant="filled"
-                        InputProps={{
-                            readOnly: true,
-                        }}
+                return <>
+                        <Typography
+                            sx={{ mt: 0.5, ml: 2,mb:1 }}
+                            color="text.secondary"
+                            display="block"
+                            variant="body"
+                            textAlign="center"
+                            
+                            >
+                            {`instancia ${pos+1}`}
+                            <Divider component="div" />
+                        </Typography>
+                        <div key={`io-${pos}`} id={`io-${pos}`}>
+                                
+                                <TextField
+                                id={`input-${pos}`}
+                                label={`Entrada ${pos+1}:`}
+                                multiline
+                                rows={5}
+                                defaultValue={element.input}
+                                // variant="filled"
+                                // htmlFor="component-disabled"
+                                disabled
+                                // sx={{
+                                //     "& .css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled": {
+                                //       color: "rgba(0, 0, 0, 1)" // (default alpha is 0.38)
+                                //     }
+                                //   }}
+                                // InputProps={{
+                                //     readOnly: true,
+                                // }}
 
-                        />
-                        <TextField
-                        id={`output-${pos}`}
-                        label={`Saida-${pos+1}`}
-                        multiline
-                        rows={5}    
-                        defaultValue={element.output}
-                        variant="filled"
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        />
-                    </div>
+                                />
+                                <TextField
+                                id={`output-${pos}`}
+                                label={`Saída ${pos+1}: `}
+                                multiline
+                                rows={5}    
+                                defaultValue={element.output}
+                                // style={{"textarea:disabled": {color:"rgba(255,255,0,1) !important"}}}
+                                // variant="filled"
+                                // sx={{":disabled": {color:"rgba(255,255,0,1) !important"}}}                                
+                                disabled
+                                // InputProps={{
+                                //     readOnly: true,
+                                // }}
+                                />
+                            </div>
+                    </>
             })}
             
         
@@ -127,7 +160,6 @@ class Exercise extends React.Component{
         // this.exerciseData = {};
         // console.log(data)
         // this.alertControll = props.alertControll;
-        
     }
     
     updateExerciseData = (exerciseData) =>{
@@ -141,22 +173,23 @@ class Exercise extends React.Component{
     }
     sendSolution = () =>{
         
-        const IOlist =[].slice.call(this.exerciseRef.current.children.io_box.children).map((element,pos,list) => {
-            let input= element.children[0].children[1].children[`input-${pos}`].textContent
-            let output = element.children[1].children[1].children[`output-${pos}`].textContent
-            return {input,output}
-        })
+        
         let ids = this.exerciseRef.current.children.id_exercise.textContent.split(":")[1].split("-")
-        let trailId=parseInt(ids[0])
-        let maxLenghtTrail=parseInt(ids[1])
-        let exerciseId=parseInt(ids[2])
+        let trailId = parseInt(ids[0])
+        let maxLenghtTrail  =parseInt(ids[1])
+        let exerciseId = parseInt(ids[2])
+        let currentExercise = ExerciseController.getExercise(exerciseId)
+        console.log("currentExercise")
+        console.log(currentExercise)
+        const IOlist = [...currentExercise.IOlist]
+        
 
         let IOData = {
-            title:this.exerciseRef.current.children.title.textContent,
+            title:currentExercise.title,
             id: exerciseId,
             trailId,
             maxLenghtTrail,
-            description:this.exerciseRef.current.children.title.textContent,
+            description:currentExercise.description,
             //ajustar
             IOlist,
             userData:{...this.state.session}
@@ -184,7 +217,7 @@ class Exercise extends React.Component{
             this.state.executeXML()
 
             if (this.state.getOutput() !== IOobject["output"]){
-                alert(`A saida-${i+1} esperada não corresponde com o resultado da saida do algoritmo`)
+                alert(`A Saída ${i+1} esperada não corresponde com o resultado da saída do algoritmo`)
                 return
             }
 

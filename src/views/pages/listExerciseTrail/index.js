@@ -249,7 +249,9 @@ class ListExerciseTrail extends React.Component{
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xs">
                 <CssBaseline />
-                 
+                <Typography gutterBottom variant="title" component="h1" align="center" sx={{width:400,marginTop: 2}} >
+                    Trilhas de exercício
+                </Typography>
                 <Grid container justifyContent="flex-end" sx={{width:400,marginTop: 2}} >
                     <ComboBox trailFeatures={this.difficultyLevels} onSelect={this.selectLevel} defaultValue={this.difficultyLevels.length-1} ></ComboBox>
                 </Grid>

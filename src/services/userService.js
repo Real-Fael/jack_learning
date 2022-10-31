@@ -43,6 +43,9 @@ class UserService{
     static getUserData(email){
         return LocalStorage.getUserLoginInformation(email);
     }
+    static getAllUsersData(){
+        return[...LocalStorage.getLoginsList()];
+    }
 
     static getSession(){
         return LocalStorage.getSession();

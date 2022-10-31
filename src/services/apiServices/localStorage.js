@@ -37,8 +37,29 @@ class LocalStorage{
         })
         window.localStorage.setItem("exercises",JSON.stringify(exercises));
     }
+    static StoreOrEditExerciseData(exerciseData){
+        
+        //caso retorne um objeto ja existe esse usuario
+        // eslint-disable-next-line
+        // if (this.getUserLoginInformation(exerciseData.email)) throw "Usuário ja cadastrado"
+        let exerciseDataAux={...exerciseData}
+        let exercises = this.getExerciseList();
 
+        let nextId= (exercises.length!==0?(exercises[exercises.length-1].id+1):0) 
+        exerciseDataAux.id = (exerciseDataAux.id!==null)?parseInt(exerciseDataAux.id):nextId
+        if (exerciseDataAux.id===exercises[exercises.length-1].id +1){
+            exercises.push(exerciseDataAux)
+        }else{
+            exercises[exerciseDataAux.id] = exerciseDataAux
+        }
 
+        // exercises.push({
+        //     ...exerciseData, id: (exercises[exercises.length-1].id+1)
+        // })
+        window.localStorage.setItem("exercises",JSON.stringify(exercises));
+    }
+
+    
     
 
 
@@ -49,7 +70,18 @@ class LocalStorage{
         let logins = this.getLoginsList();
         for(let i=0;i<logins.length;i++){
             if(logins[i].email===email) {
-                exists={...logins[i], id:i};
+                exists={...logins[i]};
+                break;
+            }
+        }
+        return exists;
+    }
+    static getUserLoginPosition(email){
+        let exists= null;
+        let logins = this.getLoginsList();
+        for(let i=0;i<logins.length;i++){
+            if(logins[i].email===email) {
+                exists=i;
                 break;
             }
         }
@@ -87,8 +119,8 @@ class LocalStorage{
         // if (this.getUserLoginInformation(userData.email)) throw "Usuário ja cadastrado"
         let logins = this.getLoginsList();
         let updateData = {...userData}
-        delete updateData.id
-        logins[userData.id]={
+        // delete updateData.id
+        logins[this.getUserLoginPosition(userData.email)]={
             ...updateData
         }
         window.localStorage.setItem("logins",JSON.stringify(logins));

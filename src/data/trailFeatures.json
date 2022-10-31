@@ -1,9 +1,9 @@
 { 
    "levels": [
-      {"label":"Introdutório", "level":1},
-      {"label":"Iniciante", "level":2},
-      {"label":"Intermediario", "level":3},
-      {"label":"Avançado", "level":4}
+      
+      {"label":"Iniciante", "level":1},
+      {"label":"Intermediario", "level":2},
+      {"label":"Avançado", "level":3}
 
    ]  
 

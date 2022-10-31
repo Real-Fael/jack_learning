@@ -35,6 +35,12 @@ class UsersController {
         return user
         //return (!!user)? user:{id:-1,user:""}//Padronização para quando nao houver sessao ativa
     }
+    static getAllUsersData(){
+      
+        const user= UserService.getAllUsersData();
+        return user
+        
+    }
 
     static getSession(){
       

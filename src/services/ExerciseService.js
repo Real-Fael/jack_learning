@@ -25,6 +25,16 @@ class ExerciseService{
             throw e;
         }
     }
+    static editExercise(ExerciseData){
+        
+        
+        try{
+            LocalStorage.StoreOrEditExerciseData(ExerciseData);
+
+        }catch(e){
+            throw e;
+        }
+    }
 
     
     static getExercise(exerciseId){

@@ -29,7 +29,7 @@ class BlocklyExecControll extends React.Component{
     // const { height, width } = getWindowDimensions();
     
     this.state ={
-      xml:'',
+      xml: '',
       // windowSize: {height,width}
     }
     this.dataInput = React.createRef()
@@ -48,6 +48,7 @@ class BlocklyExecControll extends React.Component{
     //delete
     this.exerciseData = props.exerciseData
     this.sendSolution = props.sendSolution
+    this.initialXML = props.initialXML
   }
 
   getOutput = () =>{
@@ -124,7 +125,7 @@ class BlocklyExecControll extends React.Component{
       
       <div className="app-container">
       
-          <MyBlocklyEditor toolBox={this.myToolBox} updateXml={this.updateXml} />
+          <MyBlocklyEditor toolBox={this.myToolBox} updateXml={this.updateXml} xml={this.initialXML} />
         
           <div className="main output-panel">
             <button onClick={this.execCode} >Executar</button>

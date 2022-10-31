@@ -126,7 +126,7 @@ function ExerciseTrail(props){
             return(<>
             
             <CardActionArea href={`/exercise/${selectedTrail.id}-${props.index}-${props.exercise.id}`}  sx={{ width: "100%",
-                    height: "100%" }}   key={`${(props.exercise.id+1)}`} >
+                    height: "100%",background:(props.index <qtdSolved)?"rgba(34,255,60,0.10)":"inherit" }}   key={`${(props.exercise.id+1)}`} >
                         {/* <CardMedia
                             component="img"
                             alt="Contemplative Reptrail"
@@ -145,7 +145,7 @@ function ExerciseTrail(props){
                             // style={{ minHeight: '100vh' }}
                             >
                             <Grid item xs={3}>
-                            <Avatar sx={{bgcolor: 'primary.main'}} children={`${(props.index+1)}`}  src="/static/images/avatar/5.jpg" />
+                                <Avatar sx={{bgcolor: 'primary.main'}} children={`${(props.index+1)}`}  src="/static/images/avatar/5.jpg" />
                             </Grid>
                         </Grid>
                         {/* </IconButton> */}
@@ -193,8 +193,21 @@ function ExerciseTrail(props){
                     </CardActionArea>
                     </>)
 
-        return(<CardActionArea href={`/exercise/${selectedTrail.id}-${props.index}-${props.exercise.id}`}  sx={{ width: "100%",
-                height: "100%",background:"rgb(235,235,235)" }} disabled={true}  key={`${(props.exercise.id+1)}`} >
+        return(
+            // <a  style={{
+            //     font: "inherit",
+            //     color: "inherit",
+            //     textDecoration:"none",
+            //     // pointerEvents: "none",
+            //     cursor:"default"
+            //     /* optional reset */
+            //     // background: "transparent",
+            //     // border: "none",
+            //     // margin: "0",
+            //     // padding: "0",
+            // }} >
+        <CardContent onClick={()=>{alert("Você deve completar os exercicios anteriores")} }  sx={{ width: "100%",
+                height: "100%",background:"rgb(235,235,235)" }} key={`${(props.exercise.id+1)}`} >
                     {/* <CardMedia
                         component="img"
                         alt="Contemplative Reptrail"
@@ -243,7 +256,9 @@ function ExerciseTrail(props){
                     </Grid>
                         
                     </CardContent>
-                </CardActionArea>)
+                </CardContent>
+                // </a>
+                )
         // userData.trailSolved
 
         
@@ -251,7 +266,7 @@ function ExerciseTrail(props){
     
     const ShowTrailExercises = (props) =>{
         let selectedTrail = props.selectedTrail
-        let sessionData= props.sessionData
+        // let sessionData= props.sessionData
         let pagination= props.pagination
         let dimensionPage= props.dimensionPage
         let paginationClick= props.paginationClick

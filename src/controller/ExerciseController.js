@@ -15,6 +15,17 @@ class ExerciseController {
 
        
     }
+    static editExerciseCheck(ExerciseData){
+
+        try{
+            ExerciseService.editExercise(ExerciseData)
+
+        }catch(e){
+            throw e;
+        }
+
+       
+    }
 
     
 

@@ -42,17 +42,7 @@ export const reorder =(
       secondary: `frase ${k+1}`//faker.company.catchPhrase()
     }));
   
-//   const useStyles = makeStyles({
-//     flexPaper: {
-//       flex: 1,
-//       margin: 16,
-//       minWidth: 350
-//     },
-//     root: {
-//       display: 'flex',
-//       flexWrap: 'wrap'
-//     }
-//   });
+
 
 function not(a, b) {
     console.log(b)

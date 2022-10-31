@@ -19,7 +19,7 @@ import { stringAvatar } from '../../controller/utilsController';
 
 
 const pagesRedirect = {'Home':'/', 'Trilhas':'/Exercisetrail', 'Documentação':'/documentation'};
-const teacherPagesRedirect = {'Home':'/', 'Trilhas':'/ExerciseTrail', 'Documentação':'/documentation','Criar exercicio':'/newExercise'};
+const teacherPagesRedirect = {'Home':'/', 'Trilhas':'/ExerciseTrail', 'exercicios':'/Exercise', 'Documentação':'/documentation'};
 const settingsRedirect = {'Profile':'/Profile', 'Account':'/Account', 'Logout':'/Logout'};
 const nonLogedRedirect = {'Acessar':'/login','Cadastrar':'/register'}
 const pages = Object.keys(pagesRedirect)//['Products', 'Pricing', 'Blog'];

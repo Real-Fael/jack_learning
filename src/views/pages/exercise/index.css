@@ -54,3 +54,8 @@
 .editor{
     height: calc(100% * 2/3);
 }
+
+.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+    opacity: 1;
+    -webkit-text-fill-color: rgba(0, 0, 0, 1) !important;
+}
