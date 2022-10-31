@@ -19,7 +19,7 @@ class ExerciseService{
         
         
         try{
-            LocalStorage.storeExerciseData(ExerciseData);
+            LocalStorage.StoreOrEditExerciseData(ExerciseData);
 
         }catch(e){
             throw e;

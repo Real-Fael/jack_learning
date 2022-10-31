@@ -197,7 +197,7 @@ class Navbar extends React.Component{
               textDecoration: 'none',
             }}
           >
-            <img alt='head Jack' src={require("./..\\..\\data\\jackHeadRight.png")} height={30} width={50}/>
+            <img alt='head Jack' src={require("./../../data/jackHeadRight.png")} height={30} width={50}/>
              Jack Learning
           </Typography>
 
@@ -254,7 +254,7 @@ class Navbar extends React.Component{
               textDecoration: 'none',
             }}
           >
-            <img alt='head Jack' src={require("./..\\..\\data\\jackHeadRight.png")} height={30} width={50}/>
+            <img alt='head Jack' src={require("./../../data/jackHeadRight.png")} height={30} width={50}/>
             Jack  Learning
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

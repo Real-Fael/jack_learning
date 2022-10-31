@@ -95,7 +95,7 @@ function NewExercise(props){
     const IOtester = () =>{
         
         let IOData = {
-            id: (exerciseId)?exerciseId:null,
+            id: (exerciseId &&(mode==="edit"))?exerciseId:null,
             title:refForm.current.title.value,
             description:refForm.current.description.value,
             creatorExercise:sessionData
@@ -110,7 +110,7 @@ function NewExercise(props){
             return
         }
 
-        if (IOLen <= 5){
+        if (IOLen < 5){
             alert("deve conter ao menos 5 instâncias de entrada e saida")
             return
         }
@@ -152,6 +152,8 @@ function NewExercise(props){
         ExerciseController.cadExerciseCheck(IOData)
 
         window.location.href = "/"
+
+
         // console.log(state.exercise.IOexamples)
         // console.log(state.exercise.IOexamples[0].props.children[0].type)
         

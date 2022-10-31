@@ -45,9 +45,10 @@ class LocalStorage{
         let exerciseDataAux={...exerciseData}
         let exercises = this.getExerciseList();
 
-        let nextId= (exercises.length!==0?(exercises[exercises.length-1].id+1):0) 
+        let nextId = (exercises.length!==0?(exercises[exercises.length-1].id+1):0) 
         exerciseDataAux.id = (exerciseDataAux.id!==null)?parseInt(exerciseDataAux.id):nextId
-        if (exerciseDataAux.id===exercises[exercises.length-1].id +1){
+        
+        if (exercises.length===0|| exerciseDataAux.id===exercises[exercises.length-1].id +1){
             exercises.push(exerciseDataAux)
         }else{
             exercises[exerciseDataAux.id] = exerciseDataAux

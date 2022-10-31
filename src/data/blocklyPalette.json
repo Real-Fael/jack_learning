@@ -229,14 +229,6 @@
                   "kind": "LABEL",
                   "text": "Input/Output:",
                   "web-class": "ioLabel"
-              },
-              {
-                  "kind": "BLOCK",
-                  "type": "text_print"
-              },
-              {
-                  "kind": "BLOCK",
-                  "type": "text_prompt_ext"
               }
           ],
           
