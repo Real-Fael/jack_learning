@@ -123,18 +123,18 @@ class BlocklyExecControll extends React.Component{
     return (
 
       
-      <div className="app-container">
+      <div className="app-container" data-tut="reactour__workspace">
       
           <MyBlocklyEditor toolBox={this.myToolBox} updateXml={this.updateXml} xml={this.initialXML} />
         
           <div className="main output-panel">
-            <button onClick={this.execCode} >Executar</button>
-            <button onClick={this.testeInput}>Parar</button>
-            <button onClick={this.submitSolution}>Enviar</button>
+            <button data-tut="reactour__execution" onClick={this.execCode} >Executar</button>
+            {/* <button onClick={this.testeInput}>Parar</button> */}
+            <button data-tut="reactour__submit" onClick={this.submitSolution}>Enviar</button>
             <br></br>
         
-            <textarea ref={this.dataInput} className='textarea input'></textarea>
-            <textarea ref={this.dataOutput} className='textarea output' disabled ></textarea>
+            <textarea data-tut="reactour__input__area" ref={this.dataInput} className='textarea input'></textarea>
+            <textarea data-tut="reactour__output__area" ref={this.dataOutput} className='textarea output' disabled ></textarea>
           </div>
       
       </div>

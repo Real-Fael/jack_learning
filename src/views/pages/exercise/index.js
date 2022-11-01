@@ -12,11 +12,59 @@ import ExerciseController from "../../../controller/ExerciseController";
 import SucessAlertDialogSlide from "../../../components/userDialogue";
 import TrailController from "../../../controller/trailController";
 import { Paragliding } from "@mui/icons-material";
-
+import Tour from "reactour";
 
 
 const theme = createTheme();
 
+const tourConfig = [
+    {
+      // updateDelay: 1500,
+      selector: '[data-tut="reactour__all__page"]',
+      content: `Bem vindo Ao Jack Learning!!! Este é o ambiente de desenvolvimento das tarefas.`
+    },
+    {
+      selector: '[data-tut="reactour__exercise__info"]',
+      content: `Aqui você pode encontrar as informações necessárias para o desenvolvimento da tarefa.`
+    },
+    {
+      selector: '[data-tut="reactour__instances"]',
+      content: `Aqui você encontra as instâncias que exemplificam o algoritimo.\nSeu algoritmo deverá antender corretamente a todas as instâncias para ser aprovado. `
+    },
+    {
+      selector: '[data-tut="reactour__instances__left"]',
+      content: `A esquerda temos a entrada de cada instancia. `
+    },
+    {
+      selector: '[data-tut="reactour__instances__right"]',
+      content: `A direita tempos a saida esperada para a determinada entrada. `
+    },
+    {
+      selector: '[data-tut="reactour__workspace"]',
+      content: `Esta é a sua area de desenvolvimento, você pode encontrar e arrastar os blocos a partir do menu a esquerda. \n\nDesenvolva os algoritmos com atenção e capricho atendendo oque foi solicitado.`
+    },
+    {
+      selector: '[data-tut="reactour__input__area"]',
+      content: `Você pode inserir aqui valores que servirão de entrada para seu algoritmo.`
+    },
+    {
+      selector: '[data-tut="reactour__output__area"]',
+      content: `Aqui você pode observar os valores de saida gerados pelo seu algoritmo após a execução.`
+    },
+    {
+      selector: '[data-tut="reactour__execution"]',
+      content: `Você pode executar seus algoritmos quantas vezes achar necessário dentro do ambiente local.`
+    },
+    {
+      selector: '[data-tut="reactour__submit"]',
+      content: `Quando terminar, você pode submeter seu algoritmo para ser testado e avaliado.`
+    },
+    {
+      selector: '[data-tut="reactour__general"]',
+      content: `Estas foram as instruções iniciais, a partir de agora você pode se aventurar e desenvolver seus algoritmos. `
+    }
+
+  ];
 
 const Infotemplate = (props) =>{
     const {param} = useParams()
@@ -33,16 +81,38 @@ const Infotemplate = (props) =>{
     let exercise = ExerciseController.getExercise(exerciseId)
     let trail = TrailController.getTrail(parseInt(trailId))
 
+    //*******TOUR*********
+    const accentColor = "#5cb7b7";
+    const [isTourOpen, setTourOpen] = React.useState(param==="0-0-0");
     console.log("trail")
     console.log(trail)
     if (!exercise){
         window.location.href = "/exerciseTrail"
         return <>ERRO EXERCICIO NAO ENCONTRADO</>
     }
+
+    // *******TOUR*********
+    const closeTour = () => {
+    setTourOpen(false);
+    };
+    const openTour = () => {
+    setTourOpen(true);
+    };
     // props.exerciseRef(exercise);
 
-    return <Box sx={{ width: '100%', maxWidth: 500 }}  ref={props.exerciseRef} >
-        <Typography sx={{ "textAlign": 'center', "fontWeight": "bold"}} variant="h4" gutterBottom component="div" id="title" >
+    return <Box data-tut="reactour__exercise__info" sx={{ width: '100%', maxWidth: 500 }}  ref={props.exerciseRef} >
+        <Tour
+            onRequestClose={closeTour}
+            disableInteraction={false}
+            steps={tourConfig}
+            isOpen={isTourOpen}
+            maskClassName="mask"
+            className="helper"
+            rounded={5}
+            accentColor={accentColor}
+            
+        />
+        <Typography  sx={{ "textAlign": 'center', "fontWeight": "bold"}} variant="h4" gutterBottom component="div" id="title" >
             {trail.trailName}
         </Typography>
         <Typography sx={{ "textAlign": 'center', "fontWeight": "bold"}} variant="h5" gutterBottom component="div" id="title" >
@@ -77,6 +147,7 @@ const Infotemplate = (props) =>{
         }}
         noValidate
         autoComplete="off"
+        data-tut="reactour__instances"
         >
             {exercise.IOlist.map((element,pos,list) => {
                 return <>
@@ -110,7 +181,7 @@ const Infotemplate = (props) =>{
                                 // InputProps={{
                                 //     readOnly: true,
                                 // }}
-
+                                data-tut="reactour__instances__left"
                                 />
                                 <TextField
                                 id={`output-${pos}`}
@@ -122,6 +193,7 @@ const Infotemplate = (props) =>{
                                 // variant="filled"
                                 // sx={{":disabled": {color:"rgba(255,255,0,1) !important"}}}                                
                                 disabled
+                                data-tut="reactour__instances__right"
                                 // InputProps={{
                                 //     readOnly: true,
                                 // }}
@@ -252,10 +324,10 @@ class Exercise extends React.Component{
 
         return (
             <ThemeProvider theme={theme}>
-                <Container component="main" maxWidth="xs">
+                <Container  component="main" maxWidth="xs">
                 <CssBaseline />
                 {this.state.message}
-            <div className="exercise" >
+            <div className="exercise" data-tut="reactour__all__page" >
                
                
                     <div className="column describe">
@@ -264,7 +336,7 @@ class Exercise extends React.Component{
 
                     </div>
                     <div  className="workSpace">
-                        <BlocklyExecControll toolBox={test}  exerciseData= {this.exerciseRef} sendSolution={this.sendSolution}
+                        <BlocklyExecControll  toolBox={test}  exerciseData= {this.exerciseRef} sendSolution={this.sendSolution}
                         updateActions={this.updateActions}/>
 
                     </div>
