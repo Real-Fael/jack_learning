@@ -5,6 +5,7 @@ import React from "react";
 import RankingItemsList from "../../../components/rankingItemsList";
 import TrailController from "../../../controller/trailController";
 import UsersController from "../../../controller/userController";
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 const theme = createTheme();
 
@@ -29,35 +30,30 @@ function Home(props){
     // let teacher_data = users_data.filter((element)=>)
     console.log("list")
     console.log(trailList)
+    studentList = studentList.map((value,index,array)=>{
+        let quant = 0
+        if (value.hasOwnProperty("trailSolved")){
+            value.trailSolved.forEach(trailSolved => {
+                console.log(trailSolved) 
+                trailSolved.solutions.forEach(sulutions=>{
+                    // Buscar pelo trail_id as dificuldades das listas
+                    quant+=1
+                })
+            })
+        }
+        value["points"] = quant
+        return value
+    })
+    console.log("studentList")
+    console.log(studentList)
 
     let bestStudents = studentList.sort((a,b)=>{
-        let quantA=0// a.hasOwnProperty("trailSolved")? a.trailSolved.length:0
-        let quantB=0// b.hasOwnProperty("trailSolved")? b.trailSolved.length:0
-        if (a.hasOwnProperty("trailSolved")){
-            a.trailSolved.forEach(trailSolved => {
-                console.log(trailSolved) 
-                trailSolved.solutions.forEach(sulutions=>{
-                    // Buscar pelo trail_id as dificuldades das listas
-                    quantA+=1
-                })
-            })
-        }
-
-        if (b.hasOwnProperty("trailSolved")){
-            b.trailSolved.forEach(trailSolved => {
-                console.log(trailSolved) 
-                trailSolved.solutions.forEach(sulutions=>{
-                    // Buscar pelo trail_id as dificuldades das listas
-                    quantB+=1
-                })
-            })
-        }
-
-        if (quantA===quantB)
+       
+        if (a.points===b.points)
             return 0
-        if (quantA>quantB)
+        if (a.points>b.points)
             return -1
-        if (quantA<quantB)
+        if (a.points<b.points)
             return 1
     })
     console.log("best Alunos")
@@ -70,33 +66,34 @@ function Home(props){
         <CssBaseline />
         <div  style={{left:"0", right:"0px", position:"absolute"}}  >
 
-            <Grid container spacing={1}  sx={{marginTop:"0px"}} >
-                <Grid item xs >
-                    <Grid container justifyContent="center" sx={{width:400,marginTop: 2}} >
-                        <Typography component="h1" variant="h5">
-                            Rankin Alunos
+            
+                <Grid container  xs  justifyContent="flex-end" >
+                    <Grid  container justifyContent="center"  sx={{width:400, marginTop: 2}} >
+                        <Typography component="h1"  variant="h5">
+                        <EmojiEventsIcon sx={{ color: "rgb(240,201,100)" }} fontSize="large" /> Alunos
                         </Typography>
+                    
+                        <List key={"student-list"} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                            {bestStudents.map((item,index,array)=>{
+                                console.log("item")
+                                console.log(`${item.firstName} ${item.lastName}`)
+                                let fullName = `${item.firstName} ${item.lastName}`
+                                
+                            return <RankingItemsList index={index} primary={fullName} secondary={`${item.points} pontos`} myKey="student-list"></RankingItemsList>
+                            })}
+                        </List>
                     </Grid>
-                    <List key={"student-list"} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                        {bestStudents.map((item,index,array)=>{
-                            console.log("item")
-                            console.log(`${item.firstName} ${item.lastName}`)
-                            let fullName = `${item.firstName} ${item.lastName}`
-                            
-                           return <RankingItemsList index={index} primary={fullName} secondary="points" myKey="student-list"></RankingItemsList>
-                        })}
-                    </List>
                 </Grid>
-                <Grid item xs>
+                {/* <Grid item xs>
                     <Grid container justifyContent="center" sx={{width:400,marginTop: 2}} >
                         <Typography component="h1" variant="h5">
                             Rankin Professores
                         </Typography>
                     </Grid>
-                    {/* <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                          <RankingItemsList></RankingItemsList> 
 
-                    </List> */}
+                    </List> 
                 </Grid>
                 <Grid item xs>
                     <Grid container justifyContent="center" sx={{width:400,marginTop: 2}} >
@@ -104,11 +101,11 @@ function Home(props){
                             Rankin Trilhas
                         </Typography>
                     </Grid>
-                    {/* <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                         <RankingItemsList></RankingItemsList>
-                    </List> */}
-                </Grid>
-            </Grid>
+                    </List> 
+                </Grid> */}
+            
         </div>
 
         </Container>

@@ -14,6 +14,9 @@ import styled from '@material-ui/core/styles/styled';
 import { Paper } from '@material-ui/core';
 import test from "../../data/blocklyPalette.json"
 import getWindowDimensions from '../../services/windowDimensions';
+import { Fab } from '@mui/material';
+import NavigationIcon from '@mui/icons-material/Navigation';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
 
 
@@ -127,14 +130,29 @@ class BlocklyExecControll extends React.Component{
       
           <MyBlocklyEditor toolBox={this.myToolBox} updateXml={this.updateXml} xml={this.initialXML} />
         
-          <div className="main output-panel">
-            <button data-tut="reactour__execution" onClick={this.execCode} >Executar</button>
-            {/* <button onClick={this.testeInput}>Parar</button> */}
-            <button data-tut="reactour__submit" onClick={this.submitSolution}>Enviar</button>
-            <br></br>
+          <div className="main output-panel" style={{overflow:'hidden'}}>
+          <Box sx={{ '& > :not(style)': { m: 1 },
+                                    "display": "flex",
+                                    // "flexDirection": "row",
+                                    "justifyContent": "right",
+                                    // "alignItems": "right" 
+                                }}>
+    
+            <Fab color="success" size="small" variant='extended' aria-label="add" data-tut="reactour__execution" onClick={this.execCode}>
+                <PlayCircleOutlineIcon /> Executar
+            </Fab>
+          
+            <Fab variant="extended" size="small" data-tut="reactour__submit" onClick={this.submitSolution} >
+                <NavigationIcon sx={{ mr: 1 }} />Enviar
+            </Fab>
+          </Box>
+          <textarea data-tut="reactour__input__area" ref={this.dataInput} className='textarea input'></textarea>
+          <textarea data-tut="reactour__output__area" ref={this.dataOutput} className='textarea output' disabled ></textarea>
+
+            {/* <button data-tut="reactour__execution" onClick={this.execCode} >Executar</button>
+             <button onClick={this.testeInput}>Parar</button> 
+            <button data-tut="reactour__submit" onClick={this.submitSolution}>Enviar</button> */}
         
-            <textarea data-tut="reactour__input__area" ref={this.dataInput} className='textarea input'></textarea>
-            <textarea data-tut="reactour__output__area" ref={this.dataOutput} className='textarea output' disabled ></textarea>
           </div>
       
       </div>

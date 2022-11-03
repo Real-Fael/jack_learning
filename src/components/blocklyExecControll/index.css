@@ -1,11 +1,12 @@
 .input{
-    Height: calc(100% - 30px);
+    Height: calc(100% - 45px);
     width: 50% ;
     left: 8px;
+    
 }
 
 .output{
-    Height: calc(100% - 30px);
+    Height: calc(100% - 45px);
     width: 50% ;
     background-color: darkgrey;
     right: 8px;
@@ -18,4 +19,19 @@
     border: 2px solid #ccc;
     border-radius: 4px;
     resize: none;
+    overflow-y: scroll;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: scroll;
+}
+
+.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+    opacity: 1;
+    -webkit-text-fill-color: rgba(0, 0, 0, 1) !important;
+    overflow-x: scroll;
+    overflow-wrap: normal;
+    white-space: pre;
+}
+.sc-pyfCe {
+    color:rgba(0, 0, 0, 0.4) !important
 }

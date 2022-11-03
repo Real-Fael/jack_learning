@@ -127,7 +127,7 @@ const Infotemplate = (props) =>{
 
 
         <Typography variant="body1" id="description" gutterBottom>
-            {exercise.description}
+        <div dangerouslySetInnerHTML={{ __html: exercise.description.replaceAll("\n","<br>") }} /> 
         </Typography>
         <Typography variant="button" display="block" gutterBottom sx={{
             "marginTop":"16px",
@@ -194,6 +194,7 @@ const Infotemplate = (props) =>{
                                 // sx={{":disabled": {color:"rgba(255,255,0,1) !important"}}}                                
                                 disabled
                                 data-tut="reactour__instances__right"
+                                
                                 // InputProps={{
                                 //     readOnly: true,
                                 // }}
@@ -288,7 +289,7 @@ class Exercise extends React.Component{
             this.state.setInput(IOobject["input"])
             this.state.executeXML()
 
-            if (this.state.getOutput() !== IOobject["output"]){
+            if (this.state.getOutput().trim().toUpperCase() !== IOobject["output"].trim().toUpperCase()){
                 alert(`A Saída ${i+1} esperada não corresponde com o resultado da saída do algoritmo`)
                 return
             }

@@ -170,7 +170,7 @@ class Register extends React.Component{
                       variant="contained"
                       sx={{ mt: 3, mb: 2 }}
                     >
-                      Sign Up
+                      Cadastrar
                     </Button>
                     <Grid container justifyContent="flex-end">
                       <Grid item>

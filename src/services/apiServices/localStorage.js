@@ -1,3 +1,5 @@
+import initialValues from "../../data/initialLocalStorage.json"
+
 class LocalStorage{
 
     
@@ -231,6 +233,18 @@ class LocalStorage{
         trail.splice(position,1)
 
         window.localStorage.setItem("trail",JSON.stringify(trail));
+    }
+
+    static initialCharge(){
+        console.log("initialValues") 
+        console.log(initialValues) 
+        for (let key in initialValues){
+            console.log(key) 
+            if (!window.localStorage.hasOwnProperty(key)){
+                window.localStorage.setItem(key,JSON.stringify(initialValues[key]));
+            }
+            
+        }
     }
 
 }

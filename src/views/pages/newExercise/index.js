@@ -132,7 +132,7 @@ function NewExercise(props){
             functionsNewExercise.setInput(IOobject["input"])
             functionsNewExercise.executeXML()
 
-            if (functionsNewExercise.getOutput() !== IOobject["output"]){
+            if (functionsNewExercise.getOutput().trim().toUpperCase() !== IOobject["output"].trim().toUpperCase()){
                 alert(`A saida-${i+1} esperada não corresponde com o resultado da saida do algoritmo`)
                 return
             }

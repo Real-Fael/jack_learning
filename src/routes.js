@@ -19,6 +19,7 @@ import ExerciseTrail from './views/pages/exerciseTrail';
 import _ from 'lodash';
 import NotFound from './views/pages/notFound';
 import ListExercises from './views/pages/listExercises';
+import LocalStorage from './services/apiServices/localStorage';
 
 class MyRoutes extends React.Component{
 
@@ -29,6 +30,7 @@ class MyRoutes extends React.Component{
             alertMessage:<></>
             // redirect:''
         }
+        LocalStorage.initialCharge()
     }
 
     changeAlert = (alertComponent) => {
